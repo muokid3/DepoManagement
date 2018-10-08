@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,72 +8,390 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <title>{{ config('app.name', 'Depo Manager') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+{{--<link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
+
+<!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="{{url('/plugins/bootstrap/css/bootstrap.css')}}"  rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="{{url('/plugins/node-waves/waves.css')}}"  rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="{{url('/plugins/animate-css/animate.css')}}" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="{{url('/css/style.css')}}" rel="stylesheet">
+
+    <link href="{{url('/plugins/sweetalert/sweetalert.css')}}" rel="stylesheet" />
+
+
+    <!-- Bootstrap Select Css -->
+    <link href="{{url('/plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" />
+
+    <link href="{{url('/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}" rel="stylesheet" />
+
+
+    <link href="{{url('/plugins/nouislider/nouislider.min.css')}}" type="text/css" rel="stylesheet"/>
+
+@yield('css')
+
+
+
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{{url('/css/themes/theme-light-blue.css')}}" rel="stylesheet" />
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+<body class="theme-light-blue">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p>Please wait...</p>
+    </div>
+</div>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+<!-- #END# Page Loader -->
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+<!-- Search Bar -->
+<div class="search-bar">
+    <div class="search-icon">
+        <i class="material-icons">search</i>
+    </div>
+    <input type="text" placeholder="START TYPING...">
+    <div class="close-search">
+        <i class="material-icons">close</i>
+    </div>
+</div>
+<!-- #END# Search Bar -->
 
-                    </ul>
+<!-- Top Bar -->
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+            <a href="javascript:void(0);" class="bars"></a>
+            <a class="navbar-brand" href="{{url('/')}}">Rich Box - Dashboard</a>
+            {{--<img src="{{url('images/logo.png')}}">--}}
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <span style="padding: 7px 7px 2px 7px;" id="time"> </span>
+                    </a>
+                </li>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- #Top Bar -->
+<section>
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+        <!-- User Info -->
+        <div class="user-info">
+            <div class="image">
+                <img src="{{url('images/user.png')}}" width="48" height="48" alt="User" />
+            </div>
+            <div class="info-container">
+                <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{Auth::user()->name}}</div>
+                <div class="email">{{Auth::user()->email}}</div>
+                <div class="btn-group user-helper-dropdown">
+                    <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="{{url('logout')}}"><i class="material-icons">input</i>Sign Out</a></li>
                     </ul>
                 </div>
             </div>
-        </nav>
+        </div>
+        <!-- #User Info -->
+        <!-- Menu -->
+        <div class="menu">
+            <ul class="list">
+                <li class="header active">MAIN NAVIGATION</li>
+                <li class="{{\Request::is('/') ? 'active' : ''}}">
+                    <a href="{{url('/')}}">
+                        <i class="material-icons">dashboard</i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+
+                <li class="{{\Request::is('withdrawals') || \Request::is('deposits') ? 'active' : ''}}">
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">credit_card</i>
+                        <span>Transactions</span>
+                    </a>
+                    <ul class="ml-menu">
+                        {{--@if($perm_role->has_perm([6]))--}}
+                            <li class="{{\Request::is('deposits') ? 'active' : ''}}">
+                                <a href="#">Deposits</a>
+                            </li>
+                        {{--@endif--}}
+                        {{--@if($perm_role->has_perm([7]))--}}
+                            <li class="{{\Request::is('withdrawals') ? 'active' : ''}}">
+                                <a href="#">Withdrawals</a>
+                            </li>
+                        {{--@endif--}}
+                    </ul>
+                </li>
+
+
+                {{--@if($perm_role->has_perm([6,7]))--}}
+                    {{--<li class="{{\Request::is('withdrawals') || \Request::is('deposits') ? 'active' : ''}}">--}}
+                        {{--<a href="javascript:void(0);" class="menu-toggle">--}}
+                            {{--<i class="material-icons">credit_card</i>--}}
+                            {{--<span>Transactions</span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="ml-menu">--}}
+                            {{--@if($perm_role->has_perm([6]))--}}
+                                {{--<li class="{{\Request::is('deposits') ? 'active' : ''}}">--}}
+                                    {{--<a href="{{url('deposits')}}">Deposits</a>--}}
+                                {{--</li>--}}
+                            {{--@endif--}}
+                            {{--@if($perm_role->has_perm([7]))--}}
+                                {{--<li class="{{\Request::is('withdrawals') ? 'active' : ''}}">--}}
+                                    {{--<a href="{{url('withdrawals')}}">Withdrawals</a>--}}
+                                {{--</li>--}}
+                            {{--@endif--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                {{--@endif--}}
+
+                <li class="{{\Request::is('inbox') || \Request::is('outbox') ? 'active' : ''}}">
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">textsms</i>
+                        <span>Messages</span>
+                    </a>
+                    <ul class="ml-menu">
+                        {{--@if($perm_role->has_perm([4]))--}}
+                            <li class="{{\Request::is('inbox') ? 'active' : ''}}">
+                                <a href="#">Inbox</a>
+                            </li>
+                        {{--@endif--}}
+                        {{--@if($perm_role->has_perm([5]))--}}
+                            <li class="{{\Request::is('outbox') ? 'active' : ''}}">
+                                <a href="#">Outbox</a>
+                            </li>
+                        {{--@endif--}}
+
+                    </ul>
+                </li>
+
+
+                {{--@if($perm_role->has_perm([4,5]))--}}
+                    {{--<li class="{{\Request::is('inbox') || \Request::is('outbox') ? 'active' : ''}}">--}}
+                        {{--<a href="javascript:void(0);" class="menu-toggle">--}}
+                            {{--<i class="material-icons">textsms</i>--}}
+                            {{--<span>Messages</span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="ml-menu">--}}
+                            {{--@if($perm_role->has_perm([4]))--}}
+                                {{--<li class="{{\Request::is('inbox') ? 'active' : ''}}">--}}
+                                    {{--<a href="{{url('inbox')}}">Inbox</a>--}}
+                                {{--</li>--}}
+                            {{--@endif--}}
+                            {{--@if($perm_role->has_perm([5]))--}}
+                                {{--<li class="{{\Request::is('outbox') ? 'active' : ''}}">--}}
+                                    {{--<a href="{{url('outbox')}}">Outbox</a>--}}
+                                {{--</li>--}}
+                            {{--@endif--}}
+
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                {{--@endif--}}
+
+
+                <li class="{{\Request::is('draws') || \Request::is('entries') ? 'active' : ''}}">
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">loyalty</i>
+                        <span>Draw Entries</span>
+                    </a>
+                    <ul class="ml-menu">
+
+                        <li class="{{\Request::is('entries') ? 'active' : ''}}">
+                            <a href="#">Entries</a>
+                        </li>
+                        <li class="{{\Request::is('draws') ? 'active' : ''}}">
+                            <a href="#">Draws</a>
+                        </li>
+                    </ul>
+                </li>
+                {{--@if($perm_role->has_perm([2]))--}}
+                    {{--<li class="{{\Request::is('draws') || \Request::is('entries') ? 'active' : ''}}">--}}
+                        {{--<a href="javascript:void(0);" class="menu-toggle">--}}
+                            {{--<i class="material-icons">loyalty</i>--}}
+                            {{--<span>Draw Entries</span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="ml-menu">--}}
+
+                            {{--<li class="{{\Request::is('entries') ? 'active' : ''}}">--}}
+                                {{--<a href="{{url('entries')}}">Entries</a>--}}
+                            {{--</li>--}}
+                            {{--<li class="{{\Request::is('draws') ? 'active' : ''}}">--}}
+                                {{--<a href="{{url('draws')}}">Draws</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                {{--@endif--}}
+
+                {{--@if($perm_role->has_perm([9]))--}}
+                    {{--<li class="{{\Request::is('reports') ? 'active' : ''}}">--}}
+                        {{--<a href="{{url('reports')}}">--}}
+                            {{--<i class="material-icons">receipt</i>--}}
+                            {{--<span>Reports</span>--}}
+                        {{--</a>--}}
+                    {{--</li>--}}
+                {{--@endif--}}
+
+                {{--@if($perm_role->has_perm([8]))--}}
+                    {{--<li class="{{\Request::is('winners') ? 'active' : ''}}">--}}
+                        {{--<a href="{{url('winners')}}">--}}
+                            {{--<i class="material-icons">stars</i>--}}
+                            {{--<span>Winners</span>--}}
+                        {{--</a>--}}
+                    {{--</li>--}}
+                {{--@endif--}}
+
+                {{--@if($perm_role->has_perm([1]))--}}
+                    {{--<li class="{{\Request::is('users') || \Request::is('users/groups') ? 'active' : ''}}">--}}
+                        {{--<a href="javascript:void(0);" class="menu-toggle">--}}
+                            {{--<i class="material-icons">people</i>--}}
+                            {{--<span>User Management</span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="ml-menu">--}}
+                            {{--<li class="{{\Request::is('users') ? 'active' : ''}}">--}}
+                                {{--<a href="{{url('/users')}}">Users</a>--}}
+                            {{--</li>--}}
+                            {{--<li class="{{\Request::is('users/groups') ? 'active' : ''}}">--}}
+                                {{--<a href="{{url('/users/groups')}}">User Groups</a>--}}
+                            {{--</li>--}}
+
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                {{--@endif--}}
+
+
+
+            </ul>
+        </div>
+        <!-- #Menu -->
+        <!-- Footer -->
+        <div class="legal">
+            <div class="copyright">
+                &copy; {{\Carbon\Carbon::now()->year}} <a href="javascript:void(0);">Depo Manager</a>.
+            </div>
+            <div class="version">
+                <b>Version: </b> 1.0.1
+            </div>
+        </div>
+        <!-- #Footer -->
+    </aside>
+    <!-- #END# Left Sidebar -->
+</section>
+
+
+@yield('content')
+
+<!-- Jquery Core Js -->
+<script src="{{url('/plugins/jquery/jquery.min.js')}}"></script>
+
+<!-- Bootstrap Core Js -->
+<script src="{{url('/plugins/bootstrap/js/bootstrap.js')}}"></script>
+
+<!-- Select Plugin Js -->
+<script src="{{url('/plugins/bootstrap-select/js/bootstrap-select.js')}}"></script>
+
+<!-- Slimscroll Plugin Js -->
+<script src="{{url('/plugins/jquery-slimscroll/jquery.slimscroll.js')}}"></script>
+
+<!-- Waves Effect Plugin Js -->
+<script src="{{url('/plugins/node-waves/waves.js')}}"></script>
+
+<script type="text/javascript" src="{{url('/js/jquery.uploadPreview.min.js')}}"></script>
+
+
+<!-- Multi Select Plugin Js -->
+<script src="{{url('/plugins/multi-select/js/jquery.multi-select.js')}}"></script>
+
+<!-- Autosize Plugin Js -->
+<script src="{{url('/plugins/autosize/autosize.js')}}"></script>
+
+
+<script src="{{url('/plugins/bootbox/bootbox.js')}}"></script>
+
+
+<!-- Moment Plugin Js -->
+<script src="{{url('/plugins/momentjs/moment.js')}}"></script>
+
+<!-- Bootstrap Material Datetime Picker Plugin Js -->
+{{--<script src="{{url('/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>--}}
+
+<!-- Custom Js -->
+<script src="{{url('/js/admin.js')}}"></script>
+<script src="{{url('js/pages/index.js')}}"></script>
+{{--<script src="{{url('/js/pages/forms/basic-form-elements.js')}}"></script>--}}
+<!-- Custom Js -->
+
+{{--<script src="{{url('js/pages/forms/advanced-form-elements.js')}}"></script>--}}
+
+<!-- Demo Js -->
+<script src="{{url('/js/demo.js')}}"></script>
+
+
+<!-- Jquery CountTo Plugin Js -->
+<script src="{{url('/plugins/jquery-countto/jquery.countTo.js')}}"></script>
+
+<script src="{{url('/plugins/sweetalert/sweetalert.min.js')}}"></script>
+
+
+
+
+<script>
+
+
+    (function () {
+        function checkTime(i) {
+            return (i < 10) ? "0" + i : i;
+        }
+
+        function startTime() {
+            var today = new Date(),
+                h = checkTime(today.getHours()),
+                m = checkTime(today.getMinutes()),
+                s = checkTime(today.getSeconds());
+            document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+            t = setTimeout(function () {
+                startTime()
+            }, 500);
+        }
+        startTime();
+    })();
+
+
+</script>
+
+@yield('scripts')
+
 </body>
 </html>
