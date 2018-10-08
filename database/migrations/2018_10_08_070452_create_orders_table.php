@@ -15,14 +15,18 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('depot_id');
-            $table->integer('vehicle_id');
-            $table->integer('driver_id');
-            $table->integer('product_id');
-            $table->integer('quanttiy');
-            $table->tinyInteger('loaded');
+            $table->unsignedInteger('vehicle_id');
+            $table->unsignedInteger('depot_id');
+            $table->unsignedInteger('product_id');
+            $table->integer('quantity');
+            $table->boolean('loaded');
             $table->string('sms_code');
             $table->timestamps();
+
+            $table->foreign('vehicle_id')->references('id')->on('vehicles');
+            $table->foreign('depot_id')->references('id')->on('depots');
+            $table->foreign('product_id')->references('id')->on('products');
+
         });
     }
 
