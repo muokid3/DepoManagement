@@ -13,5 +13,15 @@
     "id": "3",
     "name": "Company Manger",
     "description": "Manage a certain company"
+  },
+  {
+    "id": "4",
+    "name": "Depo Manger",
+    "description": "Manage a certain depo"
+  },
+  {
+    "id": "100",
+    "name": "Unknown User",
+    "description": "Blanket User margin"
   }
 ]

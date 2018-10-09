@@ -137,160 +137,62 @@
                 </li>
 
 
-                <li class="{{\Request::is('withdrawals') || \Request::is('deposits') ? 'active' : ''}}">
-                    <a href="javascript:void(0);" class="menu-toggle">
-                        <i class="material-icons">credit_card</i>
-                        <span>Transactions</span>
+                <li class="{{\Request::is('/products') ? 'active' : ''}}">
+                    <a href="{{url('/products')}}">
+                        <i class="material-icons">device_hub</i>
+                        <span>Products</span>
                     </a>
-                    <ul class="ml-menu">
-                        {{--@if($perm_role->has_perm([6]))--}}
-                            <li class="{{\Request::is('deposits') ? 'active' : ''}}">
-                                <a href="#">Deposits</a>
-                            </li>
-                        {{--@endif--}}
-                        {{--@if($perm_role->has_perm([7]))--}}
-                            <li class="{{\Request::is('withdrawals') ? 'active' : ''}}">
-                                <a href="#">Withdrawals</a>
-                            </li>
-                        {{--@endif--}}
-                    </ul>
+                </li>
+
+                <li class="{{\Request::is('/companies') ? 'active' : ''}}">
+                    <a href="{{url('/companies')}}">
+                        <i class="material-icons">work</i>
+                        <span>Companies</span>
+                    </a>
                 </li>
 
 
-                {{--@if($perm_role->has_perm([6,7]))--}}
-                    {{--<li class="{{\Request::is('withdrawals') || \Request::is('deposits') ? 'active' : ''}}">--}}
-                        {{--<a href="javascript:void(0);" class="menu-toggle">--}}
-                            {{--<i class="material-icons">credit_card</i>--}}
-                            {{--<span>Transactions</span>--}}
-                        {{--</a>--}}
-                        {{--<ul class="ml-menu">--}}
-                            {{--@if($perm_role->has_perm([6]))--}}
-                                {{--<li class="{{\Request::is('deposits') ? 'active' : ''}}">--}}
-                                    {{--<a href="{{url('deposits')}}">Deposits</a>--}}
-                                {{--</li>--}}
-                            {{--@endif--}}
-                            {{--@if($perm_role->has_perm([7]))--}}
-                                {{--<li class="{{\Request::is('withdrawals') ? 'active' : ''}}">--}}
-                                    {{--<a href="{{url('withdrawals')}}">Withdrawals</a>--}}
-                                {{--</li>--}}
-                            {{--@endif--}}
-                        {{--</ul>--}}
-                    {{--</li>--}}
-                {{--@endif--}}
-
-                <li class="{{\Request::is('inbox') || \Request::is('outbox') ? 'active' : ''}}">
-                    <a href="javascript:void(0);" class="menu-toggle">
-                        <i class="material-icons">textsms</i>
-                        <span>Messages</span>
+                 <li class="{{\Request::is('/depots') ? 'active' : ''}}">
+                    <a href="{{url('/depots')}}">
+                        <i class="material-icons">local_gas_station</i>
+                        <span>Depots</span>
                     </a>
-                    <ul class="ml-menu">
-                        {{--@if($perm_role->has_perm([4]))--}}
-                            <li class="{{\Request::is('inbox') ? 'active' : ''}}">
-                                <a href="#">Inbox</a>
-                            </li>
-                        {{--@endif--}}
-                        {{--@if($perm_role->has_perm([5]))--}}
-                            <li class="{{\Request::is('outbox') ? 'active' : ''}}">
-                                <a href="#">Outbox</a>
-                            </li>
-                        {{--@endif--}}
+                </li>
 
-                    </ul>
+                <li class="{{\Request::is('/drivers') ? 'active' : ''}}">
+                    <a href="{{url('/drivers')}}">
+                        <i class="material-icons">person</i>
+                        <span>Drivers</span>
+                    </a>
+                </li>
+
+                <li class="{{\Request::is('/vehicles') ? 'active' : ''}}">
+                    <a href="{{url('/vehicles')}}">
+                        <i class="material-icons">directions_car</i>
+                        <span>Vehicles</span>
+                    </a>
                 </li>
 
 
-                {{--@if($perm_role->has_perm([4,5]))--}}
-                    {{--<li class="{{\Request::is('inbox') || \Request::is('outbox') ? 'active' : ''}}">--}}
-                        {{--<a href="javascript:void(0);" class="menu-toggle">--}}
-                            {{--<i class="material-icons">textsms</i>--}}
-                            {{--<span>Messages</span>--}}
-                        {{--</a>--}}
-                        {{--<ul class="ml-menu">--}}
-                            {{--@if($perm_role->has_perm([4]))--}}
-                                {{--<li class="{{\Request::is('inbox') ? 'active' : ''}}">--}}
-                                    {{--<a href="{{url('inbox')}}">Inbox</a>--}}
-                                {{--</li>--}}
-                            {{--@endif--}}
-                            {{--@if($perm_role->has_perm([5]))--}}
-                                {{--<li class="{{\Request::is('outbox') ? 'active' : ''}}">--}}
-                                    {{--<a href="{{url('outbox')}}">Outbox</a>--}}
-                                {{--</li>--}}
-                            {{--@endif--}}
 
-                        {{--</ul>--}}
-                    {{--</li>--}}
-                {{--@endif--}}
-
-
-                <li class="{{\Request::is('draws') || \Request::is('entries') ? 'active' : ''}}">
-                    <a href="javascript:void(0);" class="menu-toggle">
-                        <i class="material-icons">loyalty</i>
-                        <span>Draw Entries</span>
-                    </a>
-                    <ul class="ml-menu">
-
-                        <li class="{{\Request::is('entries') ? 'active' : ''}}">
-                            <a href="#">Entries</a>
-                        </li>
-                        <li class="{{\Request::is('draws') ? 'active' : ''}}">
-                            <a href="#">Draws</a>
-                        </li>
-                    </ul>
-                </li>
-                {{--@if($perm_role->has_perm([2]))--}}
-                    {{--<li class="{{\Request::is('draws') || \Request::is('entries') ? 'active' : ''}}">--}}
-                        {{--<a href="javascript:void(0);" class="menu-toggle">--}}
-                            {{--<i class="material-icons">loyalty</i>--}}
-                            {{--<span>Draw Entries</span>--}}
-                        {{--</a>--}}
-                        {{--<ul class="ml-menu">--}}
-
-                            {{--<li class="{{\Request::is('entries') ? 'active' : ''}}">--}}
-                                {{--<a href="{{url('entries')}}">Entries</a>--}}
-                            {{--</li>--}}
-                            {{--<li class="{{\Request::is('draws') ? 'active' : ''}}">--}}
-                                {{--<a href="{{url('draws')}}">Draws</a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
-                    {{--</li>--}}
-                {{--@endif--}}
-
-                {{--@if($perm_role->has_perm([9]))--}}
-                    {{--<li class="{{\Request::is('reports') ? 'active' : ''}}">--}}
-                        {{--<a href="{{url('reports')}}">--}}
-                            {{--<i class="material-icons">receipt</i>--}}
-                            {{--<span>Reports</span>--}}
-                        {{--</a>--}}
-                    {{--</li>--}}
-                {{--@endif--}}
-
-                {{--@if($perm_role->has_perm([8]))--}}
-                    {{--<li class="{{\Request::is('winners') ? 'active' : ''}}">--}}
-                        {{--<a href="{{url('winners')}}">--}}
-                            {{--<i class="material-icons">stars</i>--}}
-                            {{--<span>Winners</span>--}}
-                        {{--</a>--}}
-                    {{--</li>--}}
-                {{--@endif--}}
 
                 {{--@if($perm_role->has_perm([1]))--}}
-                    {{--<li class="{{\Request::is('users') || \Request::is('users/groups') ? 'active' : ''}}">--}}
-                        {{--<a href="javascript:void(0);" class="menu-toggle">--}}
-                            {{--<i class="material-icons">people</i>--}}
-                            {{--<span>User Management</span>--}}
-                        {{--</a>--}}
-                        {{--<ul class="ml-menu">--}}
-                            {{--<li class="{{\Request::is('users') ? 'active' : ''}}">--}}
-                                {{--<a href="{{url('/users')}}">Users</a>--}}
-                            {{--</li>--}}
-                            {{--<li class="{{\Request::is('users/groups') ? 'active' : ''}}">--}}
-                                {{--<a href="{{url('/users/groups')}}">User Groups</a>--}}
-                            {{--</li>--}}
+                    <li class="{{\Request::is('users') || \Request::is('users/groups') ? 'active' : ''}}">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">people</i>
+                            <span>User Management</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li class="{{\Request::is('users') ? 'active' : ''}}">
+                                <a href="{{url('/users')}}">Users</a>
+                            </li>
+                            <li class="{{\Request::is('users/groups') ? 'active' : ''}}">
+                                <a href="{{url('/users/groups')}}">User Groups</a>
+                            </li>
 
-                        {{--</ul>--}}
-                    {{--</li>--}}
+                        </ul>
+                    </li>
                 {{--@endif--}}
-
 
 
             </ul>
