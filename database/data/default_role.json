@@ -11,12 +11,12 @@
   },
   {
     "id": "3",
-    "name": "Company Manger",
+    "name": "Company Manager",
     "description": "Manage a certain company"
   },
   {
     "id": "4",
-    "name": "Depo Manger",
+    "name": "Depo Manager",
     "description": "Manage a certain depo"
   },
   {
