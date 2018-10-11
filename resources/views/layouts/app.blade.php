@@ -137,14 +137,14 @@
                 </li>
 
 
-                <li class="{{\Request::is('/products') ? 'active' : ''}}">
+                <li class="{{\Request::is('products') ? 'active' : ''}}">
                     <a href="{{url('/products')}}">
                         <i class="material-icons">device_hub</i>
                         <span>Products</span>
                     </a>
                 </li>
 
-                <li class="{{\Request::is('/companies') ? 'active' : ''}}">
+                <li class="{{\Request::is('companies') ? 'active' : ''}}">
                     <a href="{{url('/companies')}}">
                         <i class="material-icons">work</i>
                         <span>Companies</span>
@@ -152,21 +152,21 @@
                 </li>
 
 
-                 <li class="{{\Request::is('/depots') ? 'active' : ''}}">
+                 <li class="{{\Request::is('depots') ? 'active' : ''}}">
                     <a href="{{url('/depots')}}">
                         <i class="material-icons">local_gas_station</i>
                         <span>Depots</span>
                     </a>
                 </li>
 
-                <li class="{{\Request::is('/drivers') ? 'active' : ''}}">
+                <li class="{{\Request::is('drivers') ? 'active' : ''}}">
                     <a href="{{url('/drivers')}}">
                         <i class="material-icons">person</i>
                         <span>Drivers</span>
                     </a>
                 </li>
 
-                <li class="{{\Request::is('/vehicles') ? 'active' : ''}}">
+                <li class="{{\Request::is('vehicles') ? 'active' : ''}}">
                     <a href="{{url('/vehicles')}}">
                         <i class="material-icons">directions_car</i>
                         <span>Vehicles</span>

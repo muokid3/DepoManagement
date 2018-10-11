@@ -17,7 +17,7 @@ class CreateVehiclesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('company_id');
             $table->string('license_plate');
-            $table->integer('capacity');
+            $table->string('capacity');
             $table->text('calibration_chart');
             $table->text('image_link');
             $table->boolean('blacklisted')->default(false);
