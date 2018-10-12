@@ -11,10 +11,6 @@ class BlackList extends Model
         return $this->belongsTo('App\Vehicle', 'vehicle_id');
     }
 
-    public function depot()
-    {
-        return $this->belongsTo('App\Depot', 'depot_id');
-    }
 
     public function blacklister()
     {

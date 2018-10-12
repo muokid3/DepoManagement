@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\BlackList;
 use App\Driver;
 use App\Vehicle;
 use App\VehicleDriver;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -37,31 +39,32 @@ class VehicleController extends Controller
             'license_plate' => 'required|max:20',
             'capacity' => 'required|max:10',
             'calibration_chart' => 'file|max:5000',
-            'image' => 'file|max:5000',
+            'vehicle_image' => 'file|max:5000',
         ]);
 
 
         DB::transaction(function() use ($request) {
             $destinationPath = 'uploads';
-            $current_time = Carbon::now()->timestamp;
 
+            $calibration_time = Carbon::now()->timestamp;
             $calibration_chart = $request->file('calibration_chart');
-            $image = $request->file('image');
+            $calibrationLink = 'uploads/'.$calibration_time.'-'.$calibration_chart->getClientOriginalName();
+            $calibration_chart->move($destinationPath,$calibration_time.'-'.$calibration_chart->getClientOriginalName());
 
-            if ($calibration_chart->move($destinationPath,$current_time.'-'.$calibration_chart->getClientOriginalName()) &&
-                $image->move($destinationPath,$current_time.'-'.$calibration_chart->getClientOriginalName())){
 
-                $vehicle = new Vehicle();
-                $vehicle->company_id = $request->company_id;
-                $vehicle->license_plate = $request->license_plate;
-                $vehicle->capacity = $request->capacity;
-                $vehicle->calibration_chart = 'uploads/'.$current_time.'-'.$calibration_chart->getClientOriginalName();
-                $vehicle->image_link = 'uploads/'.$current_time.'-'.$image->getClientOriginalName();
-                $vehicle->saveOrFail();
-                Session::flash("success", "Vehicle created Successfully!");
-            }else{
-                Session::flash("error", "An error occurred when upload the files, please try again");
-            }
+            $image_time = Carbon::now()->addSeconds(13)->timestamp;
+            $image = $request->file('vehicle_image');
+            $imageLink ='uploads/'.$image_time.'-'.$image->getClientOriginalName();
+            $image->move($destinationPath,$image_time.'-'.$image->getClientOriginalName());
+
+            $vehicle = new Vehicle();
+            $vehicle->company_id = $request->company_id;
+            $vehicle->license_plate = $request->license_plate;
+            $vehicle->capacity = $request->capacity;
+            $vehicle->calibration_chart = $calibrationLink;
+            $vehicle->image_link = $imageLink;
+            $vehicle->saveOrFail();
+            Session::flash("success", "Vehicle created Successfully!");
 
         });
 
@@ -156,7 +159,6 @@ class VehicleController extends Controller
         }
     }
 
-
     function revoke_driver($vehicle_id, $driver_id)
     {
         $vehicle = Vehicle::find($vehicle_id);
@@ -174,26 +176,31 @@ class VehicleController extends Controller
                     $vehicleDriver->update();
                     Session::flash("success", "Driver has been revoked");
 
-
-//                    if ($vehicleDriver->active){
-//                        Session::flash("message", $driver->name." is already assigned to this vehicle");
-//
-//                    }else{
-//                        DB::table('vehicle_drivers')
-//                            ->where('vehicle_id', '=', $request->vehicle_id)
-//                            ->update(array('active' => 0));
-//                        $vehicleDriver->active = 1;
-//                        $vehicleDriver->update();
-//                        Session::flash("success", "Driver re-assigned Successfully!");
-//
-//                    }
-
                 }
 
             });
             return view('vehicles.vehicle')->with('vehicle', $vehicle);
 
-
         }
+    }
+
+    function blacklist_vehicle(Request $request)
+    {
+        $blacklist = new BlackList();
+        $blacklist->vehicle_id = $request->vehicle_id;
+        $blacklist->reason = $request->reason;
+        $blacklist->blacklister_id = Auth::user()->id;
+
+        $vehicle = Vehicle::find($request->vehicle_id);
+        $vehicle->blacklisted = 1;
+
+
+            DB::transaction(function() use ($blacklist, $vehicle) {
+                $blacklist->saveOrFail();
+                $vehicle->update();
+                Session::flash("success", "Vehicle has been blacklisted");
+            });
+        return redirect()->back();
+
     }
 }

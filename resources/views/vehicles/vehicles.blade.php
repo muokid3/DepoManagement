@@ -84,8 +84,8 @@
                                         @foreach($vehicles as $vehicle)
                                             <tr>
                                                 <td>
-                                                    <a href="{{$vehicle->image_link}}" target="_blank">
-                                                        <img src="{{$vehicle->image_link}}" width="50" alt="Vehicle">
+                                                    <a href="{{url($vehicle->image_link)}}" target="_blank">
+                                                        <img src="{{url($vehicle->image_link)}}" width="50" alt="Vehicle">
                                                     </a>
                                                 </td>
                                                 <td>
@@ -95,7 +95,7 @@
                                                 <td>{{optional($vehicle->company)->company_name}}</td>
                                                 <td>{{$vehicle->blacklisted ? "Yes" : "No"}}</td>
                                                 <td>
-                                                    <a href="{{$vehicle->calibration_chart}}" target="_blank">View</a>
+                                                    <a href="{{url($vehicle->calibration_chart)}}" target="_blank">View</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -171,8 +171,8 @@
                                                             <div class="input-group input-group-sm">
                                                                 <div class="form-line">
                                                                     <label>Vehicle Image</label>
-                                                                    <input name="image"  type="file" required />
-                                                                    {{$errors->first("image") }}
+                                                                    <input name="vehicle_image"  type="file" required />
+                                                                    {{$errors->first("vehicle_image") }}
                                                                 </div>
                                                             </div>
                                                         </div>
