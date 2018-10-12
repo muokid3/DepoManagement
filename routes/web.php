@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/vehicles/{id}','VehicleController@vehicle')->middleware('perm:1');
     Route::post('/vehicles/new','VehicleController@new_vehicle')->middleware('perm:1');
     Route::post('/vehicles/update','VehicleController@update_vehicle')->middleware('perm:1');
+    Route::post('/vehicles/assign_driver','VehicleController@assign_driver')->middleware('perm:1');
+    Route::get('/vehicles/revoke_driver/{vehicle_id}/{driver_id}','VehicleController@revoke_driver')->middleware('perm:1');
 
 
 

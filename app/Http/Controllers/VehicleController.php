@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Driver;
 use App\Vehicle;
+use App\VehicleDriver;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -97,6 +99,100 @@ class VehicleController extends Controller
                 Session::flash("success", "Vehicle updated Successfully!");
             });
             return redirect()->back();
+
+        }
+    }
+
+    function assign_driver(Request $request)
+    {
+        $this->validate($request, [
+            'vehicle_id' => 'required',
+            'driver_id' => 'required',
+        ]);
+
+
+        $vehicle = Vehicle::find($request->vehicle_id);
+        $driver = Driver::find($request->driver_id);
+        if (is_null($vehicle) || is_null($driver)){
+            abort(404);
+        }else{
+            DB::transaction(function() use ($vehicle, $driver, $request) {
+                $vehicleDriver = VehicleDriver::where('vehicle_id', $request->vehicle_id)->where('driver_id', $request->driver_id)->first();
+
+                if (is_null($vehicleDriver)){
+
+                    DB::table('vehicle_drivers')
+                        ->where('vehicle_id', '=', $request->vehicle_id)
+                        ->update(array('active' => 0));
+
+                    $newVehicleDriver = new VehicleDriver();
+                    $newVehicleDriver->vehicle_id = $request->vehicle_id;
+                    $newVehicleDriver->driver_id = $request->driver_id;
+                    $newVehicleDriver->saveOrFail();
+
+                    Session::flash("success", "Driver assigned Successfully!");
+
+                }else{
+
+
+                    if ($vehicleDriver->active){
+                        Session::flash("message", $driver->name." is already assigned to this vehicle");
+
+                    }else{
+                        DB::table('vehicle_drivers')
+                            ->where('vehicle_id', '=', $request->vehicle_id)
+                            ->update(array('active' => 0));
+                        $vehicleDriver->active = 1;
+                        $vehicleDriver->update();
+                        Session::flash("success", "Driver re-assigned Successfully!");
+
+                    }
+
+                }
+
+            });
+            return redirect()->back();
+
+        }
+    }
+
+
+    function revoke_driver($vehicle_id, $driver_id)
+    {
+        $vehicle = Vehicle::find($vehicle_id);
+        if (is_null($vehicle)){
+            abort(404);
+        }else{
+            DB::transaction(function() use ($vehicle_id, $driver_id) {
+                $vehicleDriver = VehicleDriver::where('vehicle_id', $vehicle_id)->where('driver_id', $driver_id)->first();
+
+                if (is_null($vehicleDriver)){
+                    Session::flash("message", "Driver does not exist");
+                }else{
+
+                    $vehicleDriver->active = 0;
+                    $vehicleDriver->update();
+                    Session::flash("success", "Driver has been revoked");
+
+
+//                    if ($vehicleDriver->active){
+//                        Session::flash("message", $driver->name." is already assigned to this vehicle");
+//
+//                    }else{
+//                        DB::table('vehicle_drivers')
+//                            ->where('vehicle_id', '=', $request->vehicle_id)
+//                            ->update(array('active' => 0));
+//                        $vehicleDriver->active = 1;
+//                        $vehicleDriver->update();
+//                        Session::flash("success", "Driver re-assigned Successfully!");
+//
+//                    }
+
+                }
+
+            });
+            return view('vehicles.vehicle')->with('vehicle', $vehicle);
+
 
         }
     }

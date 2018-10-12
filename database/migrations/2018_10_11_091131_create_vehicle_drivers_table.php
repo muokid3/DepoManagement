@@ -15,8 +15,9 @@ class CreateVehicleDriversTable extends Migration
     {
         Schema::create('vehicle_drivers', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('vehicle_id')->unique();
-            $table->unsignedInteger('driver_id')->unique();
+            $table->unsignedInteger('vehicle_id');
+            $table->unsignedInteger('driver_id');
+            $table->boolean('active')->default(true);
             $table->timestamps();
 
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');

@@ -69,7 +69,7 @@
                                                     <div class="row clearfix">
                                                         <div class="col-md-12 {{ $errors->has('image') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                                             <div class="input-group input-group-sm">
-                                                                <img src="{{$vehicle->image_link}}" width="100" alt="image">
+                                                                <img src="{{url($vehicle->image_link)}}" width="100" alt="image">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -83,7 +83,7 @@
 
                                                         <div class="col-md-6" style="margin-bottom: 0px">
                                                             <div class="input-group input-group-sm">
-                                                                Calibration Chart: <strong><a href="{{$vehicle->calibration_chart}}" target="_blank">View</a> </strong>
+                                                                Calibration Chart: <strong><a href="{{url($vehicle->calibration_chart)}}" target="_blank">View</a> </strong>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -166,7 +166,7 @@
                                     <!-- Nav tabs -->
                                     <ul class="nav nav-tabs tab-nav-right" role="tablist">
                                         <li role="presentation" class="active"><a href="#present" data-toggle="tab">PRESENT/PREVIOUS</a></li>
-                                        <li role="presentation"><a href="#reasign" data-toggle="tab">REASSIGN DRIVER</a></li>
+                                        <li role="presentation"><a href="#reasign" data-toggle="tab">ASSIGN/REASSIGN DRIVER</a></li>
 
                                     </ul>
 
@@ -175,13 +175,30 @@
                                         <div role="tabpanel" class="tab-pane fade in active" id="present">
                                             <b>Current Driver</b>
 
-                                            <table class="table tabe-responsive">
+                                            <table class="table table-responsive">
 
                                                 <tbody>
                                                     <tr>
-                                                        <td>Lorem</td>
-                                                        <td>Ipsum</td>
-                                                        <td>Dolot</td>
+                                                        @if(is_null($vehicle->currentDriver()))
+                                                           <td>
+                                                               --Vehicle has no current driver--
+                                                           </td>
+                                                        @else
+                                                                <td>{{optional($vehicle->currentDriver()->driver)->name}}</td>
+                                                                <td>{{optional($vehicle->currentDriver()->driver)->phone_no}}</td>
+                                                                <td>
+                                                                    <a href="{{url('/drivers/'.optional($vehicle->currentDriver()->driver)->id)}}">
+                                                                        <span class="btn btn-success btn-sm"><span class="glyphicon glyphicon-search"></span>
+                                                                        &nbsp;View</span>
+                                                                    </a>
+
+                                                                    <a href="#" onclick="rm('{{optional($vehicle->currentDriver()->driver)->name}}','{{optional($vehicle->currentDriver()->driver)->id}}','{{$vehicle->license_plate}}','{{$vehicle->id}}')">
+                                                                        <span class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span>
+                                                                        &nbsp;Revoke</span>
+                                                                    </a>
+                                                                </td>
+                                                        @endif
+
                                                     </tr>
                                                 </tbody>
 
@@ -194,22 +211,24 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Name</th>
-                                                    <th>Description</th>
+                                                    <th>Phone</th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {{--@foreach($user_permissions as $user_permission)--}}
-                                                    {{--<tr>--}}
-                                                        {{--<td>{{$user_permission->get_permission->name}}</td>--}}
-                                                        {{--<td>{{$user_permission->get_permission->description}}</td>--}}
-                                                        {{--<td>--}}
-                                                            {{--<a href="{{url('/users/groups/permissions/delete/'.$user_permission->id)}}">--}}
-                                                        {{--<span class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span>--}}
-                                                        {{--&nbsp;Delete</span></a>--}}
-                                                        {{--</td>--}}
-                                                    {{--</tr>--}}
-                                                {{--@endforeach--}}
+
+                                                @foreach($vehicle->previousDrivers() as $previousDriver)
+                                                    <tr>
+                                                        <td>{{optional($previousDriver->driver)->name}}</td>
+                                                        <td>{{optional($previousDriver->driver)->phone_no}}</td>
+                                                        <td>
+                                                            <a href="{{url('/drivers/'.optional($previousDriver->driver)->id)}}">
+                                                                        <span class="btn btn-success btn-sm"><span class="glyphicon glyphicon-search"></span>
+                                                                        &nbsp;View</span></a>
+                                                        </td>
+                                                    </tr>
+
+                                                @endforeach
                                                 </tbody>
 
                                             </table>
@@ -218,15 +237,15 @@
                                         </div>
 
                                         <div role="tabpanel" class="tab-pane fade" id="reasign">
-                                            <b>Reassign Driver</b>
-                                            <form class="form-horizontal" role="form" method="POST" action="#">
+                                            <b>Assign/Reassign Driver</b>
+                                            <form class="form-horizontal" role="form" method="POST" action="{{ url('/vehicles/assign_driver') }}">
                                                 {{ csrf_field() }}
 
                                                 <div class="modal-body">
                                                         <div class="body">
                                                             <h2 class="card-inside-title">Pick a driver</h2>
 
-
+                                                            <input type="hidden" name="vehicle_id" value="{{$vehicle->id}}">
 
                                                             <div class="row clearfix">
                                                                 <div class="col-md-12 {{ $errors->has('driver_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
@@ -250,7 +269,7 @@
                                                         </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-success waves-effect">Reassign</button>
+                                                    <button type="submit" class="btn btn-success waves-effect">Assign</button>
                                                 </div>
 
                                             </form>
@@ -325,12 +344,12 @@
 
 @section('scripts')
     <script>
-        function rm(nm,artistID){
-            bootbox.confirm("Are you sure you want to delete \"" + nm + "\" ? ", function(result) {
+        function rm(driverName,driverId,vehicleReg,vehicleId){
+            bootbox.confirm("Revoke \"" + driverName + "\" from \""+ vehicleReg + "\"?", function(result) {
                 if(result) {
 
                     $.ajax({
-                        url: 'users/delete/' + artistID,
+                        url: '/vehicles/revoke_driver/' + vehicleId + '/' + driverId,
                         type: 'get',
                         headers: {
                             'X-XSRF-Token': $('meta[name="_token"]').attr('content')
