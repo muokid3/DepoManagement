@@ -15,6 +15,8 @@ class CreateUserPermissionsTable extends Migration
     {
         Schema::create('user_permissions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_group');
+            $table->integer('permission');
             $table->timestamps();
         });
     }

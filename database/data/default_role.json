@@ -20,6 +20,16 @@
     "description": "Manage a certain depo"
   },
   {
+    "id": "5",
+    "name": "Company Clerk",
+    "description": "Manage a certain company"
+  },
+  {
+    "id": "6",
+    "name": "Depo Clerk",
+    "description": "Manage a certain depo"
+  },
+  {
     "id": "100",
     "name": "Unknown User",
     "description": "Blanket User margin"

@@ -186,9 +186,9 @@
                             <li class="{{\Request::is('users') ? 'active' : ''}}">
                                 <a href="{{url('/users')}}">Users</a>
                             </li>
-                            <li class="{{\Request::is('users/groups') ? 'active' : ''}}">
-                                <a href="{{url('/users/groups')}}">User Groups</a>
-                            </li>
+                            {{--<li class="{{\Request::is('users/groups') ? 'active' : ''}}">--}}
+                                {{--<a href="{{url('/users/groups')}}">User Groups</a>--}}
+                            {{--</li>--}}
 
                         </ul>
                     </li>

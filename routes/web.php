@@ -57,7 +57,13 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-    Route::get('/users','UserController@index')->middleware('perm:1');
+    Route::get('/users', 'UserController@index')->middleware('perm:1');
+    Route::get('/users/delete/{user_id}', 'UserController@delete_user')->middleware('perm:1');
+    Route::post('/enroll', 'UserController@register_user')->middleware('perm:1');
+    Route::get('/users/profile/{user_id}', 'UserController@profile')->middleware('perm:1');
+    Route::post('/users/profile/update', 'UserController@update')->middleware('perm:1');
+
+
 
 });
 
