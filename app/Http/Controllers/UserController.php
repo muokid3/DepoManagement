@@ -52,6 +52,7 @@ class UserController extends Controller
         $this->user->name = $request->name;
         $this->user->user_group = $request->user_group_id;
         $this->user->email = $request->email;
+        $this->user->org_id = $request->org_id ? $request->org_id : null;
         $this->user->password = bcrypt($this->random_pass);
 
 

@@ -18,6 +18,9 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/','HomeController@index')->middleware('perm:1');
 
+    Route::get('/get_orgs/{user_group}', 'HomeController@get_orgs');
+
+
 
     Route::get('/products','ProductController@index')->middleware('perm:1');
     Route::get('/products/{id}','ProductController@product')->middleware('perm:1');

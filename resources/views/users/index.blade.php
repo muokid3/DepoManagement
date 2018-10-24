@@ -132,18 +132,31 @@
                                                         </div>
                                                     </div>
 
+
                                                     <div class="row clearfix">
                                                         <div class="col-md-4 {{ $errors->has('user_group_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                                             <div class="input-group input-group-sm">
                                                                 <div class="form-line">
                                                                     <label>User Group</label>
-                                                                    <select name="user_group_id" class="form-control show-tick" required data-live-search="true">
+                                                                    <select id="user-group" name="user_group_id" class="form-control show-tick" required data-live-search="true">
                                                                         <option value="">Select User Group</option>
                                                                         @foreach(\App\UserGroup::where('id','<',100)->get() as $userGroup)
                                                                             <option value="{{$userGroup->id}}">{{$userGroup->name}}</option>
                                                                         @endforeach
                                                                     </select>
                                                                     {{$errors->first("user_group_id") }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="org-div" class="col-md-4 {{ $errors->has('org_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="form-line">
+                                                                    <label>Organisation</label>
+
+                                                                    <select class="form-control show-tick"  id="organisation-id" name="org_id"  >
+                                                                    </select>
+                                                                    {{$errors->first("org_id") }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -195,13 +208,49 @@
             });
         }
 
-
         $(document).ready(function() {
             $.uploadPreview({
                 input_field: "#image-upload",
                 preview_box: "#image-preview",
                 label_field: "#image-label"
             });
+
+            var userGroup = $("#user-group");
+            var organisation = $("#organisation-id");
+
+            $("#org-div").hide();
+            organisation.attr("disabled", true);
+
+
+            userGroup.on('change', function () {
+                organisation.empty();
+                organisation.html('');
+                $.ajax("{{url('/get_orgs')}}/" + userGroup.val(), {
+                    success: function (message) {
+                        //console.log(message);
+                        $("#org-div").show();
+                        var temp = JSON.parse(message);
+                        var listItems = "<option value='' disabled>--Select organisation--</option>";
+                        $.each(temp, function (i, item) {
+                            listItems += '<option value=' + temp[i].id + '>' + temp[i].name + '</option>';
+                        });
+                        organisation.html(listItems);
+                        console.log(listItems);
+                        organisation.attr("disabled", false);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $("#org-div").hide();
+                    }
+                });
+            });
+
+
+
         });
+
+
+
+
     </script>
 @endsection
