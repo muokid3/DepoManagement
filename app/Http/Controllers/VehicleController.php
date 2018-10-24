@@ -68,7 +68,7 @@ class VehicleController extends Controller
 
         });
 
-        return redirect('/vehicles');
+        return redirect()->back();
     }
 
     function vehicle($vehicle_id)

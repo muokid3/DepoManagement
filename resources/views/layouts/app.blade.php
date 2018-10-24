@@ -136,47 +136,48 @@
                     </a>
                 </li>
 
+                @if(auth()->user()->user_group == 1)
 
-                <li class="{{\Request::is('products') ? 'active' : ''}}">
-                    <a href="{{url('/products')}}">
-                        <i class="material-icons">device_hub</i>
-                        <span>Products</span>
-                    </a>
-                </li>
+                    <li class="{{\Request::is('products') ? 'active' : ''}}">
+                        <a href="{{url('/products')}}">
+                            <i class="material-icons">device_hub</i>
+                            <span>Products</span>
+                        </a>
+                    </li>
 
-                <li class="{{\Request::is('companies') ? 'active' : ''}}">
-                    <a href="{{url('/companies')}}">
-                        <i class="material-icons">work</i>
-                        <span>Companies</span>
-                    </a>
-                </li>
-
-
-                 <li class="{{\Request::is('depots') ? 'active' : ''}}">
-                    <a href="{{url('/depots')}}">
-                        <i class="material-icons">local_gas_station</i>
-                        <span>Depots</span>
-                    </a>
-                </li>
-
-                <li class="{{\Request::is('drivers') ? 'active' : ''}}">
-                    <a href="{{url('/drivers')}}">
-                        <i class="material-icons">person</i>
-                        <span>Drivers</span>
-                    </a>
-                </li>
-
-                <li class="{{\Request::is('vehicles') ? 'active' : ''}}">
-                    <a href="{{url('/vehicles')}}">
-                        <i class="material-icons">directions_car</i>
-                        <span>Vehicles</span>
-                    </a>
-                </li>
+                    <li class="{{\Request::is('companies') ? 'active' : ''}}">
+                        <a href="{{url('/companies')}}">
+                            <i class="material-icons">work</i>
+                            <span>Companies</span>
+                        </a>
+                    </li>
 
 
+                    <li class="{{\Request::is('depots') ? 'active' : ''}}">
+                        <a href="{{url('/depots')}}">
+                            <i class="material-icons">local_gas_station</i>
+                            <span>Depots</span>
+                        </a>
+                    </li>
+
+                    <li class="{{\Request::is('drivers') ? 'active' : ''}}">
+                        <a href="{{url('/drivers')}}">
+                            <i class="material-icons">person</i>
+                            <span>Drivers</span>
+                        </a>
+                    </li>
+
+                    <li class="{{\Request::is('vehicles') ? 'active' : ''}}">
+                        <a href="{{url('/vehicles')}}">
+                            <i class="material-icons">directions_car</i>
+                            <span>Vehicles</span>
+                        </a>
+                    </li>
 
 
-                {{--@if($perm_role->has_perm([1]))--}}
+
+
+                    {{--@if($perm_role->has_perm([1]))--}}
                     <li class="{{\Request::is('users') || \Request::is('users/groups') ? 'active' : ''}}">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">people</i>
@@ -187,12 +188,15 @@
                                 <a href="{{url('/users')}}">Users</a>
                             </li>
                             {{--<li class="{{\Request::is('users/groups') ? 'active' : ''}}">--}}
-                                {{--<a href="{{url('/users/groups')}}">User Groups</a>--}}
+                            {{--<a href="{{url('/users/groups')}}">User Groups</a>--}}
                             {{--</li>--}}
 
                         </ul>
                     </li>
-                {{--@endif--}}
+                    {{--@endif--}}
+
+
+                @endif
 
 
             </ul>

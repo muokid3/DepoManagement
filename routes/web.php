@@ -16,7 +16,7 @@ Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/','HomeController@index')->middleware('perm:1');
+    Route::get('/','HomeController@index');
 
     Route::get('/get_orgs/{user_group}', 'HomeController@get_orgs');
 
@@ -51,8 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::get('/vehicles','VehicleController@index')->middleware('perm:1');
-    Route::get('/vehicles/{id}','VehicleController@vehicle')->middleware('perm:1');
-    Route::post('/vehicles/new','VehicleController@new_vehicle')->middleware('perm:1');
+    Route::get('/vehicles/{id}','VehicleController@vehicle');//->middleware('perm:1');
+    Route::post('/vehicles/new','VehicleController@new_vehicle');//->middleware('perm:1');
     Route::post('/vehicles/update','VehicleController@update_vehicle')->middleware('perm:1');
     Route::post('/vehicles/assign_driver','VehicleController@assign_driver')->middleware('perm:1');
     Route::get('/vehicles/revoke_driver/{vehicle_id}/{driver_id}','VehicleController@revoke_driver')->middleware('perm:1');
@@ -65,6 +65,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/enroll', 'UserController@register_user')->middleware('perm:1');
     Route::get('/users/profile/{user_id}', 'UserController@profile')->middleware('perm:1');
     Route::post('/users/profile/update', 'UserController@update')->middleware('perm:1');
+
+
+    Route::post('/orders/new','OrderController@new_order');//->middleware('perm:1');
+
 
 
 
