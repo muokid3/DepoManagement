@@ -73,6 +73,7 @@
                                         <tr>
                                             <th>License Plate</th>
                                             <th>Product</th>
+                                            <th>Driver</th>
                                             <th>Quantity</th>
                                             <th>Loaded</th>
                                             <th>SMS Code</th>
@@ -86,6 +87,7 @@
                                                     <a href="{{url('/vehicles/'.(optional($order->vehicle)->id))}}">{{optional($order->vehicle)->license_plate}}</a>
                                                 </td>
                                                 <td>{{optional($order->product)->product_name}}</td>
+                                                <td>{{optional($order->driver)->name}}</td>
                                                 <td>{{$order->quantity}}</td>
                                                 <td>{{$order->loaded ? "Yes" : "No"}}</td>
                                                 <td>{{$order->sms_code}}</td>
@@ -101,81 +103,149 @@
 
                                 </div>
                                 <div role="tabpanel" class="tab-pane fade" id="adduser">
-                                    <b>Add Vehicle</b>
+                                    <b>Create new order</b>
                                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/orders/new') }}" enctype="multipart/form-data">
                                         {{ csrf_field() }}
                                         <div class="modal-body">
                                             <div class="card">
                                                 <div class="body">
-                                                    <h2 class="card-inside-title">Order Details</h2>
-
-                                                    <input type="hidden" name="depot_id" value="{{$depot->id}}">
 
                                                     <div class="row clearfix">
-                                                        <div class="col-md-4 {{ $errors->has('vehicle_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
-                                                            <div class=" input-group-sm">
-                                                                    <select name="vehicle_id" class="select2 show-tick" required data-live-search="true">
-                                                                        <option value="">Select Vehicle</option>
-                                                                        @foreach(\App\Vehicle::where('blacklisted', 0)->get() as $vehicle)
-                                                                            <option value="{{$vehicle->id}}">{{$vehicle->license_plate}} - ({{$vehicle->capacity}})</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                    {{$errors->first("vehicle_id") }}
+                                                        <div class="col-md-6 col-xs-12">
+                                                            <h2 style="text-align: center;" class="card-inside-title">Order Details</h2>
 
-                                                                OR
+                                                            <input type="hidden" name="depot_id" value="{{$depot->id}}">
 
-                                                            </div>
+                                                            <div class="row clearfix">
+                                                                <div class="col-md-8 {{ $errors->has('vehicle_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                                                    <div class=" input-group-sm">
+                                                                        <select id="vehicle-drop" name="vehicle_id" class="select2 show-tick" required data-live-search="true">
+                                                                            <option value="">Select Vehicle</option>
+                                                                            @foreach(\App\Vehicle::where('blacklisted', 0)->get() as $vehicle)
+                                                                                <option value="{{$vehicle->id}}">{{$vehicle->license_plate}} - ({{$vehicle->capacity}})</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        {{$errors->first("vehicle_id") }}
 
-                                                        </div>
+                                                                        OR
 
-                                                        <div class="col-md-2">
-                                                            <button type="button" class="btn btn-success waves-effect m-r-20" data-toggle="modal" data-target="#newVehicleModal">Create new vehicle</button>
+                                                                    </div>
 
-                                                        </div>
-                                                    </div>
+                                                                </div>
 
+                                                                <div class="col-md-4">
+                                                                    <button type="button" class="btn btn-success waves-effect m-r-20" data-toggle="modal" data-target="#newVehicleModal">Create new vehicle</button>
 
-                                                    <div class="row clearfix">
-                                                        <div class="col-md-4 {{ $errors->has('product_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
-                                                            <div class=" input-group-sm">
-                                                                    <select name="product_id" class="select2 show-tick" required data-live-search="true">
-                                                                        <option value="">Select Product</option>
-                                                                        @foreach(\App\Product::all() as $product)
-                                                                            <option value="{{$product->id}}">{{$product->product_name}}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                    {{$errors->first("product_id") }}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-2" style="margin-bottom: 0px">
-                                                            <input type="checkbox" id="basic_checkbox_2" name="loaded" class="filled-in" checked="">
-                                                            <label for="basic_checkbox_2">Vehicle is loaded</label>
-                                                        </div>
-
-                                                    </div>
-
-
-                                                    <div class="row clearfix" style="margin-top: 20px">
-                                                        <div class="col-md-6 {{ $errors->has('quantity') ? ' has-error' : '' }}" style="margin-bottom: 0px">
-                                                            <div class="input-group input-group-sm">
-                                                                <div class="form-line">
-                                                                    <input type="number" class="form-control" name="quantity" required placeholder="Quantity">
-                                                                    {{$errors->first("quantity") }}
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="row clearfix">
-                                                        <div class="col-md-6" style="margin-bottom: 0px">
-                                                            <div class="input-group input-group-sm">
-                                                                <div class="form-line">
-                                                                    <input type="text" name="sms_code"  class="form-control" placeholder="SMS Code">
-                                                                    {{$errors->first("sms_code") }}
+
+                                                            <div class="row clearfix">
+                                                                <div class="col-md-8 {{ $errors->has('driver_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                                                    <div class=" input-group-sm">
+                                                                        <select name="driver_id" class="select2 show-tick" required data-live-search="true">
+                                                                            <option value="">Select Driver</option>
+                                                                            @foreach(\App\Driver::all() as $driver)
+                                                                                <option value="{{$driver->id}}">{{$driver->name}} - ({{$driver->phone_no}})</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        {{$errors->first("driver_id") }}
+
+                                                                        OR
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <button type="button" class="btn btn-success waves-effect m-r-20" data-toggle="modal" data-target="#newDriverModal">Create new driver.</button>
+
                                                                 </div>
                                                             </div>
+
+
+                                                            <div class="row clearfix">
+                                                                <div class="col-md-8 {{ $errors->has('product_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                                                    <div class=" input-group-sm">
+                                                                        <select name="product_id" class="select2 show-tick" required data-live-search="true">
+                                                                            <option value="">Select Product</option>
+                                                                            @foreach(\App\Product::all() as $product)
+                                                                                <option value="{{$product->id}}">{{$product->product_name}}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        {{$errors->first("product_id") }}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-4" style="margin-bottom: 0px;">
+                                                                    <input type="checkbox" id="basic_checkbox_2" name="loaded" class="filled-in" checked="">
+                                                                    <label for="basic_checkbox_2">Vehicle is loaded</label>
+                                                                </div>
+
+                                                            </div>
+
+
+                                                            <div class="row clearfix" style="margin-top: 20px">
+                                                                <div class="col-md-12 {{ $errors->has('quantity') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                                                    <div class="input-group input-group-sm">
+                                                                        <div class="form-line">
+                                                                            <input type="number" class="form-control" name="quantity" required placeholder="Quantity">
+                                                                            {{$errors->first("quantity") }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row clearfix">
+                                                                <div class="col-md-12" style="margin-bottom: 0px">
+                                                                    <div class="input-group input-group-sm">
+                                                                        <div class="form-line">
+                                                                            <input type="text" name="sms_code"  class="form-control" placeholder="SMS Code">
+                                                                            {{$errors->first("sms_code") }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
+
+                                                        <div class="col-md-6 col-xs-12">
+
+                                                            <h2 style="text-align: center;" class="card-inside-title">Vehicle Details</h2>
+
+
+                                                            <div class="row clearfix">
+                                                                <div class="col-md-12 {{ $errors->has('image') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                                                    <div id="vehicle-body" class="input-group input-group-sm">
+                                                                        <img id="vehicle-img" src="" width="100%" class="img-responsive" alt="image">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                                <div class="row">
+                                                                    <div id="calibration-body" class="col-sm-6">
+                                                                        Calibration Chart: <strong><a id="calibration-chart" href="" target="_blank">View</a> </strong>
+                                                                    </div>
+
+                                                                    <div class="col-sm-6" id="company">
+                                                                        Company: <strong></strong>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="row">
+                                                                    <div class="col-sm-6" id="capacity">
+                                                                        Capacity: <strong></strong>
+                                                                    </div>
+
+                                                                    <div class="col-sm-6" id="licence-plate">
+                                                                        License Plate:
+                                                                    </div>
+                                                                </div>
+
+                                                        </div>
+
+
                                                     </div>
 
 
@@ -289,6 +359,67 @@
     </div>
 
 
+    <div class="modal fade" id="newDriverModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">New Driver</h4>
+                </div>
+                <form class="form-horizontal" role="form" method="POST" action="{{ url('/drivers/new') }}">
+                    {{ csrf_field() }}
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="body">
+                                <h2 class="card-inside-title">Driver Details</h2>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-12 {{ $errors->has('driver_name') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                        <div class="input-group input-group-sm">
+                                            <div class="form-line">
+                                                <input type="text" class="form-control" name="driver_name" autofocus required placeholder="Driver Name">
+                                                {{$errors->first("driver_name") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-12" style="margin-bottom: 0px">
+                                        <div class="input-group input-group-sm">
+                                            <div class="form-line">
+                                                <input type="text" name="id_no" required class="form-control" placeholder="ID/Passport Number">
+                                                {{$errors->first("id_no") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-12" style="margin-bottom: 0px">
+                                        <div class="input-group input-group-sm">
+                                            <div class="form-line">
+                                                <input type="number" name="phone_no" required class="form-control" placeholder="Phone Number">
+                                                {{$errors->first("phone_no") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success waves-effect">Save</button>
+                    </div>
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+
 
 @endsection
 
@@ -315,12 +446,66 @@
         }
 
 
+        var vehicle = $("#vehicle-drop");
+
+        var vehicleBody = $("#vehicle-body");
+        var calibrationBody = $("#calibration-body");
+        var company = $("#company");
+        var licencePlate = $("#licence-plate");
+        var capacityLabel = $("#capacity");
+        var driverLabel = $("#current-driver");
+        var vehicleImg = document.getElementById("vehicle-img");
+        var calibrationChart = document.getElementById("calibration-chart");
+
         $(document).ready(function() {
             $.uploadPreview({
                 input_field: "#image-upload",
                 preview_box: "#image-preview",
                 label_field: "#image-label"
             });
+
+            company.hide();
+            licencePlate.hide();
+            capacityLabel.hide();
+            vehicleBody.hide();
+            calibrationBody.hide();
         });
+
+
+
+        vehicle.on('change', function () {
+
+            $.ajax("{{url('/get_vehicle')}}/" + vehicle.val(), {
+                success: function (message) {
+                    console.log(message);
+
+                    company.show();
+                    licencePlate.show();
+                    capacityLabel.show();
+                    vehicleBody.show();
+                    calibrationBody.show();
+
+
+
+                    var temp = JSON.parse(message);
+                    company.html('Company: <strong>' + temp.company + '</strong>');
+                    licencePlate.html('License Plate: <strong>' + temp.licence + '</strong>');
+                    capacityLabel.html('Capacity: <strong>' + temp.capacity + '</strong>');
+                    calibrationChart.setAttribute("href", temp.image_link);
+                    vehicleImg.setAttribute("src", temp.calibration_chart_link);
+
+                },
+                error: function (error) {
+                    console.log(error);
+                    company.hide();
+                    licencePlate.hide();
+                    capacityLabel.hide();
+                }
+            });
+        });
+
+
+
+
     </script>
 @endsection

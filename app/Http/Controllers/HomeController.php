@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Depot;
 use App\Order;
+use App\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -103,6 +104,22 @@ class HomeController extends Controller
                     'message'   =>  "Not found"
                 ), 404);
         }
+    }
+
+    function get_vehicle($vehicle_id)
+    {
+
+        $vehicle = Vehicle::find($vehicle_id);
+
+
+        echo json_encode(array(
+            'image_link'      =>  $vehicle->image_link,
+            'calibration_chart_link'   =>  $vehicle->calibration_chart,
+            'company'      =>  $vehicle->company->company_name,
+            'licence'   =>  $vehicle->license_plate,
+            'capacity'   =>  $vehicle->capacity
+        ), 200);
+
     }
 
 }

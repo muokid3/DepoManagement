@@ -19,4 +19,9 @@ class Order extends Model
     {
         return $this->belongsTo('App\Product', 'depot_id');
     }
+
+    public function driver()
+    {
+        return $this->belongsTo('App\Driver', 'driver_id');
+    }
 }

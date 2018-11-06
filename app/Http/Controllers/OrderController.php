@@ -31,6 +31,7 @@ class OrderController extends Controller
             $order->quantity = $request->quantity;
             $order->loaded = $request->has('loaded');
             $order->sms_code = $request->sms_code;
+            $order->driver_id = $request->driver_id;
             $order->saveOrFail();
             Session::flash("success", "Order created Successfully!");
 

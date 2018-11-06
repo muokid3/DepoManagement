@@ -45,7 +45,7 @@ class DriverController extends Controller
             Session::flash("success", "Driver created Successfully!");
         });
 
-        return redirect('/drivers');
+        return redirect()->back();
     }
 
     function driver($driver_id)

@@ -19,6 +19,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/','HomeController@index');
 
     Route::get('/get_orgs/{user_group}', 'HomeController@get_orgs');
+    Route::get('/get_vehicle/{vehicle_id}', 'HomeController@get_vehicle');
 
 
 
@@ -45,7 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/drivers','DriverController@index')->middleware('perm:1');
     Route::get('/drivers/{id}','DriverController@driver')->middleware('perm:1');
-    Route::post('/drivers/new','DriverController@new_driver')->middleware('perm:1');
+    Route::post('/drivers/new','DriverController@new_driver');
     Route::post('/drivers/update','DriverController@update_driver')->middleware('perm:1');
 
 
