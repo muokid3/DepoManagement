@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class EditOrdersAddDriver extends Migration
+class MakesmscodeNullble extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class EditOrdersAddDriver extends Migration
      */
     public function up()
     {
-//        Schema::table('orders', function (Blueprint $table) {
-//            $table->unsignedInteger('driver_id');
-//            $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
-//
-//        });
+        Schema::table('orders', function($table)
+        {
+            $table->string('sms_code')->nullable()->change();
+        });
     }
 
     /**

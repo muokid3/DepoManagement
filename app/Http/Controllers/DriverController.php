@@ -38,9 +38,15 @@ class DriverController extends Controller
 
         DB::transaction(function() use ($request) {
             $driver = new Driver();
+
+            $phone = ltrim($request->phone_no, '0');
+            $phone = ltrim($phone, '254');
+            $phone = ltrim($phone, '+254');
+
+
             $driver->name = $request->driver_name;
             $driver->id_no = $request->id_no;
-            $driver->phone_no = $request->phone_no;
+            $driver->phone_no = '+254'.$phone;
             $driver->saveOrFail();
             Session::flash("success", "Driver created Successfully!");
         });

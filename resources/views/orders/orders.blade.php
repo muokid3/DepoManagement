@@ -71,6 +71,7 @@
                                     <table class="table table-responsive">
                                         <thead>
                                         <tr>
+                                            <th></th>
                                             <th>License Plate</th>
                                             <th>Product</th>
                                             <th>Driver</th>
@@ -83,6 +84,12 @@
                                         <tbody>
                                         @foreach($orders as $order)
                                             <tr>
+                                                <td>
+                                                    <a href="{{url('/orders/'.$order->id)}}">
+                                                        <i class="material-icons">remove_red_eye</i> <span class="icon-name">View Order</span>
+                                                    </a>
+                                                </td>
+
                                                 <td>
                                                     <a href="{{url('/vehicles/'.(optional($order->vehicle)->id))}}">{{optional($order->vehicle)->license_plate}}</a>
                                                 </td>
@@ -177,10 +184,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="col-md-4" style="margin-bottom: 0px;">
-                                                                    <input type="checkbox" id="basic_checkbox_2" name="loaded" class="filled-in" checked="">
-                                                                    <label for="basic_checkbox_2">Vehicle is loaded</label>
-                                                                </div>
+
 
                                                             </div>
 
@@ -191,17 +195,6 @@
                                                                         <div class="form-line">
                                                                             <input type="number" class="form-control" name="quantity" required placeholder="Quantity">
                                                                             {{$errors->first("quantity") }}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row clearfix">
-                                                                <div class="col-md-12" style="margin-bottom: 0px">
-                                                                    <div class="input-group input-group-sm">
-                                                                        <div class="form-line">
-                                                                            <input type="text" name="sms_code"  class="form-control" placeholder="SMS Code">
-                                                                            {{$errors->first("sms_code") }}
                                                                         </div>
                                                                     </div>
                                                                 </div>
