@@ -13,11 +13,11 @@ class EditOrdersAddDriver extends Migration
      */
     public function up()
     {
-//        Schema::table('orders', function (Blueprint $table) {
-//            $table->unsignedInteger('driver_id');
-//            $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
-//
-//        });
+        Schema::table('orders', function (Blueprint $table) {
+            $table->unsignedInteger('driver_id');
+            $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
+
+        });
     }
 
     /**
