@@ -142,7 +142,28 @@
                                                             <h2 class="card-inside-title">Products</h2>
 
                                                             <div class="row clearfix">
-                                                                <div class="col-md-4" style="margin-bottom: 0px">
+                                                                <div class="col-md-12" style="margin-bottom: 0px">
+
+                                                                    <table class="table table-responsive">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>Compartment</th>
+                                                                            <th>Product</th>
+                                                                            <th>Quantity</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        @foreach(json_decode($order->items, true) as $item)
+                                                                            <tr>
+                                                                                <td>{{\App\Compartment::find($item['compartment_id'])->name}}</td>
+                                                                                <td>{{\App\Product::find($item['product'])->product_name}}</td>
+                                                                                <td>{{$item['quantity']}}</td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                        </tbody>
+
+                                                                    </table>
+
                                                                     {{--{{$order->product->product_name }}--}}
 
                                                                 </div>
