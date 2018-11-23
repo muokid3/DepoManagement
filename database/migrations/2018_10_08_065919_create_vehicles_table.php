@@ -15,15 +15,14 @@ class CreateVehiclesTable extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('company_id');
             $table->string('license_plate');
-            $table->string('capacity');
+            $table->string('trailer_plate')->nullable();
+            $table->string('rfid_code')->nullable();
             $table->text('calibration_chart');
-            $table->text('image_link');
+            $table->text('image_link')->nullable();
             $table->boolean('blacklisted')->default(false);
             $table->timestamps();
 
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
         });
     }

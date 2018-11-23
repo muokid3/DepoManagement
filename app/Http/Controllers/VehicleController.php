@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BlackList;
+use App\Compartment;
 use App\Driver;
 use App\Vehicle;
 use App\VehicleDriver;
@@ -35,11 +36,8 @@ class VehicleController extends Controller
     function new_vehicle(Request $request)
     {
         $this->validate($request, [
-            'company_id' => 'required',
             'license_plate' => 'required|max:20',
-            'capacity' => 'required|max:10',
             'calibration_chart' => 'file|max:5000',
-            'vehicle_image' => 'file|max:5000',
         ]);
 
 
@@ -52,18 +50,33 @@ class VehicleController extends Controller
             $calibration_chart->move($destinationPath,$calibration_time.'-'.$calibration_chart->getClientOriginalName());
 
 
-            $image_time = Carbon::now()->addSeconds(13)->timestamp;
-            $image = $request->file('vehicle_image');
-            $imageLink ='uploads/'.$image_time.'-'.$image->getClientOriginalName();
-            $image->move($destinationPath,$image_time.'-'.$image->getClientOriginalName());
 
             $vehicle = new Vehicle();
-            $vehicle->company_id = $request->company_id;
             $vehicle->license_plate = $request->license_plate;
-            $vehicle->capacity = $request->capacity;
+            $vehicle->trailer_plate = $request->trailer_plate;
+            $vehicle->rfid_code = $request->rfid_code;
             $vehicle->calibration_chart = $calibrationLink;
-            $vehicle->image_link = $imageLink;
-            $vehicle->saveOrFail();
+
+            if ($request->file('vehicle_image')){
+                $image_time = Carbon::now()->addSeconds(13)->timestamp;
+                $image = $request->file('vehicle_image');
+                $imageLink ='uploads/'.$image_time.'-'.$image->getClientOriginalName();
+                $image->move($destinationPath,$image_time.'-'.$image->getClientOriginalName());
+
+                $vehicle->image_link = $imageLink;
+            }
+
+            if ($vehicle->saveOrFail()){
+                foreach($request->comp_name as $rowNumber => $comp_name){
+                    $compartment = new Compartment();
+                    $compartment->vehicle_id = $vehicle->id;
+                    $compartment->name = $comp_name;
+                    $compartment->capacity = $request->capacity[$rowNumber];
+
+                    $compartment->saveOrFail();
+                }
+            }
+
             Session::flash("success", "Vehicle created Successfully!");
 
         });

@@ -74,8 +74,7 @@
                                         <tr>
                                             <th></th>
                                             <th>License Plate</th>
-                                            <th>Capacity</th>
-                                            <th>Company</th>
+                                            <th>Compartments</th>
                                             <th>Blacklisted</th>
                                             <th>Calibration Chart</th>
                                         </tr>
@@ -84,15 +83,16 @@
                                         @foreach($vehicles as $vehicle)
                                             <tr>
                                                 <td>
-                                                    <a href="{{url($vehicle->image_link)}}" target="_blank">
-                                                        <img src="{{url($vehicle->image_link)}}" width="50" alt="Vehicle">
-                                                    </a>
+                                                    @if(!is_null($vehicle->image_link))
+                                                        <a href="{{url($vehicle->image_link)}}" target="_blank">
+                                                            <img src="{{url($vehicle->image_link)}}" width="50" alt="Vehicle">
+                                                        </a>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <a href="{{url('/vehicles/'.($vehicle->id))}}">{{$vehicle->license_plate}}</a>
                                                 </td>
-                                                <td>{{$vehicle->capacity}}</td>
-                                                <td>{{optional($vehicle->company)->company_name}}</td>
+                                                <td>{{$vehicle->compartments->count()}}</td>
                                                 <td>{{$vehicle->blacklisted ? "Yes" : "No"}}</td>
                                                 <td>
                                                     <a href="{{url($vehicle->calibration_chart)}}" target="_blank">View</a>
@@ -120,35 +120,82 @@
                                                     <div class="row clearfix">
                                                         <div class="col-md-4 {{ $errors->has('company_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                                             <div class=" input-group-sm">
-                                                                    <select name="company_id" class="select2 show-tick" required data-live-search="true">
-                                                                        <option value="">Select Company</option>
-                                                                        @foreach(\App\Company::all() as $company)
-                                                                            <option value="{{$company->id}}">{{$company->company_name}}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                    {{$errors->first("company_id") }}
+                                                                <select name="company_id" class="select2 show-tick" required data-live-search="true">
+                                                                    <option value="">Select Company</option>
+                                                                    @foreach(\App\Company::all() as $company)
+                                                                        <option value="{{$company->id}}">{{$company->company_name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                {{$errors->first("company_id") }}
                                                             </div>
                                                         </div>
                                                     </div>
 
 
-                                                    <div class="row clearfix" style="margin-top: 20px">
+                                                    <div class="row clearfix" >
                                                         <div class="col-md-6 {{ $errors->has('license_plate') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                                             <div class="input-group input-group-sm">
                                                                 <div class="form-line">
-                                                                    <input type="text" class="form-control" name="license_plate" autofocus required placeholder="License Plate">
+                                                                    <input type="text" class="form-control" name="license_plate" autofocus required placeholder="Vehicle License Plate">
                                                                     {{$errors->first("license_plate") }}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="row clearfix">
-                                                        <div class="col-md-6" style="margin-bottom: 0px">
+                                                    <div class="row clearfix" >
+                                                        <div class="col-md-6 {{ $errors->has('trailer_plate') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                                             <div class="input-group input-group-sm">
                                                                 <div class="form-line">
-                                                                    <input type="text" name="capacity" required class="form-control" placeholder="Capacity">
-                                                                    {{$errors->first("capacity") }}
+                                                                    <input type="text" class="form-control" name="trailer_plate"  placeholder="Trailer License Plate">
+                                                                    {{$errors->first("trailer_plate") }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row clearfix field_wrapper" >
+
+                                                        <div class="col-md-12" >
+                                                            <label>Vehicle Compartments</label>
+                                                        </div>
+
+
+                                                        <div class="col-md-6" >
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="form-line">
+                                                                    <label>Compartment Name</label>
+                                                                    <input type="text" name="comp_name[]" required class="form-control"/>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="col-md-6" >
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="form-line">
+                                                                    <label>Capacity</label>
+                                                                    <input type="text" name="capacity[]" required class="form-control"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row clearfix">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                <button type="button" class="btn btn-primary pull-right add-comp">
+                                                                    Add Another Compartment
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row clearfix">
+                                                        <div class="col-md-6">
+                                                            <div class="input-group input-group-sm">
+                                                                <div class="form-line">
+                                                                    <input type="text" name="rfid_code" class="form-control" placeholder="RFID Code">
+                                                                    {{$errors->first("rfid_code") }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -171,7 +218,7 @@
                                                             <div class="input-group input-group-sm">
                                                                 <div class="form-line">
                                                                     <label>Vehicle Image</label>
-                                                                    <input name="vehicle_image"  type="file" required />
+                                                                    <input name="vehicle_image"  type="file" />
                                                                     {{$errors->first("vehicle_image") }}
                                                                 </div>
                                                             </div>
@@ -230,6 +277,43 @@
                 preview_box: "#image-preview",
                 label_field: "#image-label"
             });
+
+
+
+
+            var maxField = 5; //Input fields increment limitation
+            var addButton = $('.add-comp'); //Add button selector
+            var wrapper = $('.field_wrapper'); //Input field wrapper
+            var fieldHTML = '<div class="col-md-6" >'+
+                '<div class="input-group input-group-sm">' +
+                ' <div class="form-line">' +
+                '<label>Compartment Name</label>' +
+                '<input type="text" name="comp_name[]" required class="form-control"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-md-6" >' +
+                '<div class="input-group input-group-sm">' +
+                '<div class="form-line">' +
+                '<label>Capacity</label>' +
+                '<input type="text" name="capacity[]" required class="form-control"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>'; //New input field html
+            var x = 1; //Initial field counter is 1
+
+            //Once add button is clicked
+            $(addButton).click(function(){
+                //Check maximum number of input fields
+                if(x < maxField){
+                    x++; //Increment field counter
+                    $(wrapper).append(fieldHTML); //Add field html
+                }
+            });
+
+
+
+
         });
     </script>
 @endsection

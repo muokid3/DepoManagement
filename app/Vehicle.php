@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vehicle extends Model
 {
-    public function company()
-    {
-        return $this->belongsTo('App\Company', 'company_id');
-    }
 
     public function currentDriver()
     {
@@ -19,5 +15,10 @@ class Vehicle extends Model
     public function previousDrivers()
     {
         return VehicleDriver::where('vehicle_id',$this->id)->where('active', 0)->get();
+    }
+
+    public function compartments()
+    {
+        return $this->hasMany('App\Compartment', 'vehicle_id');
     }
 }

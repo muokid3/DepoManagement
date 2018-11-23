@@ -15,13 +15,14 @@ class Order extends Model
         return $this->belongsTo('App\Depot', 'depot_id');
     }
 
-    public function product()
-    {
-        return $this->belongsTo('App\Product', 'depot_id');
-    }
 
     public function driver()
     {
         return $this->belongsTo('App\Driver', 'driver_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo('App\Company', 'company_id');
     }
 }

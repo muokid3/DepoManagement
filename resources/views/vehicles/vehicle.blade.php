@@ -61,9 +61,13 @@
                                             <b>Vehicle Details</b>
 
                                             <div class="row">
-                                                <div class="col-sm-12">
-                                                    <img src="{{url($vehicle->image_link)}}" width="100%" class="img-responsive" alt="image">
-                                                </div>
+
+                                                @if(!is_null($vehicle->image_link))
+                                                    <div class="col-sm-12">
+                                                        <img src="{{url($vehicle->image_link)}}" width="100%" class="img-responsive" alt="image">
+                                                    </div>
+                                                @endif
+
                                             </div>
 
                                             <div class="row">
@@ -78,18 +82,33 @@
 
 
                                             <div class="row">
-                                                <div class="col-sm-6">
-                                                    Capacity: <strong>{{$vehicle->capacity}}</strong>
-                                                </div>
 
                                                 <div class="col-sm-6">
                                                     License Plate: <strong>{{$vehicle->license_plate}}</strong>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    Trailer Plate: <strong>{{$vehicle->trailer_plate}}</strong>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    Company: <strong>{{$vehicle->company->company_name}}</strong>
+                                                    <b>Compartments</b>
+
+                                                    <table class="table table-responsive">
+
+                                                        <tbody>
+                                                        @foreach($vehicle->compartments as $compartment)
+                                                            <tr>
+                                                                <td>{{$compartment->name}}</td>
+                                                                <td>{{$compartment->capacity}}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                        </tbody>
+
+                                                    </table>
+
                                                 </div>
                                             </div>
 
@@ -117,7 +136,9 @@
                                                     <div class="row clearfix">
                                                         <div class="col-md-12 {{ $errors->has('image') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                                             <div class="input-group input-group-sm">
-                                                                <img src="{{url($vehicle->image_link)}}" width="100%" class="img-responsive" alt="image">
+                                                                @if(!is_null($vehicle->image_link))
+                                                                    <img src="{{url($vehicle->image_link)}}" width="100%" class="img-responsive" alt="image">
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -136,19 +157,19 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row clearfix">
-                                                        <div class="col-md-12 {{ $errors->has('company_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
-                                                            <div class=" input-group-sm">
-                                                                <select name="company_id" class="select2 show-tick" required data-live-search="true">
-                                                                    <option value="{{$vehicle->company_id}}">{{$vehicle->company->company_name}}</option>
-                                                                    @foreach(\App\Company::all() as $company)
-                                                                        <option value="{{$company->id}}">{{$company->company_name}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                {{$errors->first("company_id") }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    {{--<div class="row clearfix">--}}
+                                                        {{--<div class="col-md-12 {{ $errors->has('company_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">--}}
+                                                            {{--<div class=" input-group-sm">--}}
+                                                                {{--<select name="company_id" class="select2 show-tick" required data-live-search="true">--}}
+                                                                    {{--<option value="{{$vehicle->company_id}}">{{$vehicle->company->company_name}}</option>--}}
+                                                                    {{--@foreach(\App\Company::all() as $company)--}}
+                                                                        {{--<option value="{{$company->id}}">{{$company->company_name}}</option>--}}
+                                                                    {{--@endforeach--}}
+                                                                {{--</select>--}}
+                                                                {{--{{$errors->first("company_id") }}--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
 
 
                                                     <div class="row clearfix">
@@ -162,16 +183,16 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row clearfix">
-                                                        <div class="col-md-12 {{ $errors->has('capacity') ? ' has-error' : '' }}" style="margin-bottom: 0px">
-                                                            <div class="input-group input-group-sm">
-                                                                <div class="form-line">
-                                                                    <input type="text" class="form-control" value="{{$vehicle->capacity}}" name="capacity" required >
-                                                                    {{$errors->first("capacity") }}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    {{--<div class="row clearfix">--}}
+                                                        {{--<div class="col-md-12 {{ $errors->has('capacity') ? ' has-error' : '' }}" style="margin-bottom: 0px">--}}
+                                                            {{--<div class="input-group input-group-sm">--}}
+                                                                {{--<div class="form-line">--}}
+                                                                    {{--<input type="text" class="form-control" value="{{$vehicle->capacity}}" name="capacity" required >--}}
+                                                                    {{--{{$errors->first("capacity") }}--}}
+                                                                {{--</div>--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
 
                                                     <div class="row clearfix">
                                                         <div class="col-md-12 {{ $errors->has('phone_no') ? ' has-error' : '' }}" style="margin-bottom: 0px">

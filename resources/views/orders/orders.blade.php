@@ -75,7 +75,6 @@
                                             <th>License Plate</th>
                                             <th>Product</th>
                                             <th>Driver</th>
-                                            <th>Quantity</th>
                                             <th>Loaded</th>
                                             <th>SMS Code</th>
                                             <th>Date</th>
@@ -95,7 +94,6 @@
                                                 </td>
                                                 <td>{{optional($order->product)->product_name}}</td>
                                                 <td>{{optional($order->driver)->name}}</td>
-                                                <td>{{$order->quantity}}</td>
                                                 <td>{{$order->loaded ? "Yes" : "No"}}</td>
                                                 <td>{{$order->sms_code}}</td>
                                                 <td>{{$order->created_at}}</td>
@@ -124,12 +122,28 @@
                                                             <input type="hidden" name="depot_id" value="{{$depot->id}}">
 
                                                             <div class="row clearfix">
+                                                                <div class="col-md-8 {{ $errors->has('company_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                                                    <div class=" input-group-sm">
+                                                                        <select name="company_id" class="select2 show-tick" required data-live-search="true">
+                                                                            <option value="" selected>Select Company</option>
+                                                                            @foreach(\App\Company::all() as $company)
+                                                                                <option value="{{$company->id}}">{{$company->company_name}}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        {{$errors->first("company_id") }}
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="row clearfix">
                                                                 <div class="col-md-8 {{ $errors->has('vehicle_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                                                     <div class=" input-group-sm">
                                                                         <select id="vehicle-drop" name="vehicle_id" class="select2 show-tick" required data-live-search="true">
                                                                             <option value="">Select Vehicle</option>
                                                                             @foreach(\App\Vehicle::where('blacklisted', 0)->get() as $vehicle)
-                                                                                <option value="{{$vehicle->id}}">{{$vehicle->license_plate}} - ({{$vehicle->capacity}})</option>
+                                                                                <option value="{{$vehicle->id}}">{{$vehicle->license_plate}}</option>
                                                                             @endforeach
                                                                         </select>
                                                                         {{$errors->first("vehicle_id") }}
@@ -170,33 +184,28 @@
                                                                 </div>
                                                             </div>
 
-
-                                                            <div class="row clearfix">
-                                                                <div class="col-md-8 {{ $errors->has('product_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
-                                                                    <div class=" input-group-sm">
-                                                                        <select name="product_id" class="select2 show-tick" required data-live-search="true">
-                                                                            <option value="">Select Product</option>
-                                                                            @foreach(\App\Product::all() as $product)
-                                                                                <option value="{{$product->id}}">{{$product->product_name}}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                        {{$errors->first("product_id") }}
-                                                                    </div>
-                                                                </div>
-
-
-
-                                                            </div>
-
-
-                                                            <div class="row clearfix" style="margin-top: 20px">
-                                                                <div class="col-md-12 {{ $errors->has('quantity') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
                                                                     <div class="input-group input-group-sm">
                                                                         <div class="form-line">
-                                                                            <input type="number" class="form-control" name="quantity" required placeholder="Quantity">
-                                                                            {{$errors->first("quantity") }}
+                                                                            <label>Upload Order Document</label>
+                                                                            <input name="order_document"  type="file" />
+                                                                            {{$errors->first("order_document") }}
                                                                         </div>
                                                                     </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <b>Compartments</b>
+
+                                                                    <table class="table table-responsive" id="compartments">
+
+
+                                                                    </table>
+
                                                                 </div>
                                                             </div>
 
@@ -216,24 +225,28 @@
                                                             </div>
 
                                                                 <div class="row">
-                                                                    <div id="calibration-body" class="col-sm-6">
-                                                                        Calibration Chart: <strong><a id="calibration-chart" href="" target="_blank">View</a> </strong>
+
+                                                                    <div class="col-sm-6" id="licence-plate">
+                                                                        License Plate:
                                                                     </div>
 
-                                                                    <div class="col-sm-6" id="company">
-                                                                        Company: <strong></strong>
+                                                                    <div class="col-sm-6" id="trailer">
+                                                                        Trailer Plate: <strong></strong>
                                                                     </div>
                                                                 </div>
 
 
                                                                 <div class="row">
-                                                                    <div class="col-sm-6" id="capacity">
-                                                                        Capacity: <strong></strong>
+
+                                                                    <div id="calibration-body" class="col-sm-6">
+                                                                        Calibration Chart: <strong><a id="calibration-chart" href="" target="_blank">View</a> </strong>
                                                                     </div>
 
-                                                                    <div class="col-sm-6" id="licence-plate">
-                                                                        License Plate:
+                                                                    <div class="col-sm-6" id="rfid">
+                                                                        RFID Code: <strong></strong>
                                                                     </div>
+
+
                                                                 </div>
 
                                                         </div>
@@ -271,6 +284,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">New Vehicle</h4>
                 </div>
+
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/vehicles/new') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="modal-body">
@@ -280,7 +294,7 @@
 
 
                                 <div class="row clearfix">
-                                    <div class="col-md-8 {{ $errors->has('company_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                    <div class="col-md-4 {{ $errors->has('company_id') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                         <div class=" input-group-sm">
                                             <select name="company_id" class="select2 show-tick" required data-live-search="true">
                                                 <option value="">Select Company</option>
@@ -294,30 +308,77 @@
                                 </div>
 
 
-                                <div class="row clearfix" style="margin-top: 20px">
-                                    <div class="col-md-8 {{ $errors->has('license_plate') ? ' has-error' : '' }}" style="margin-bottom: 0px">
+                                <div class="row clearfix" >
+                                    <div class="col-md-6 {{ $errors->has('license_plate') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                         <div class="input-group input-group-sm">
                                             <div class="form-line">
-                                                <input type="text" class="form-control" name="license_plate" autofocus required placeholder="License Plate">
+                                                <input type="text" class="form-control" name="license_plate" autofocus required placeholder="Vehicle License Plate">
                                                 {{$errors->first("license_plate") }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="row clearfix">
-                                    <div class="col-md-8" style="margin-bottom: 0px">
+                                <div class="row clearfix" >
+                                    <div class="col-md-6 {{ $errors->has('trailer_plate') ? ' has-error' : '' }}" style="margin-bottom: 0px">
                                         <div class="input-group input-group-sm">
                                             <div class="form-line">
-                                                <input type="text" name="capacity" required class="form-control" placeholder="Capacity">
-                                                {{$errors->first("capacity") }}
+                                                <input type="text" class="form-control" name="trailer_plate"  placeholder="Trailer License Plate">
+                                                {{$errors->first("trailer_plate") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix field_wrapper" >
+
+                                    <div class="col-md-12" >
+                                        <label>Vehicle Compartments</label>
+                                    </div>
+
+
+                                    <div class="col-md-6" >
+                                        <div class="input-group input-group-sm">
+                                            <div class="form-line">
+                                                <label>Compartment Name</label>
+                                                <input type="text" name="comp_name[]" required class="form-control"/>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6" >
+                                        <div class="input-group input-group-sm">
+                                            <div class="form-line">
+                                                <label>Capacity</label>
+                                                <input type="text" name="capacity[]" required class="form-control"/>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row clearfix">
-                                    <div class="col-md-8" style="margin-bottom: 0px">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary pull-right add-comp">
+                                                Add Another Compartment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-6">
+                                        <div class="input-group input-group-sm">
+                                            <div class="form-line">
+                                                <input type="text" name="rfid_code" class="form-control" placeholder="RFID Code">
+                                                {{$errors->first("rfid_code") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-6" style="margin-bottom: 0px">
                                         <div class="input-group input-group-sm">
                                             <div class="form-line">
                                                 <label>Calibration Chart</label>
@@ -329,11 +390,11 @@
                                 </div>
 
                                 <div class="row clearfix">
-                                    <div class="col-md-8" style="margin-bottom: 0px">
+                                    <div class="col-md-6" style="margin-bottom: 0px">
                                         <div class="input-group input-group-sm">
                                             <div class="form-line">
                                                 <label>Vehicle Image</label>
-                                                <input name="vehicle_image"  type="file" required />
+                                                <input name="vehicle_image"  type="file" />
                                                 {{$errors->first("vehicle_image") }}
                                             </div>
                                         </div>
@@ -347,6 +408,7 @@
                         </div>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -443,12 +505,14 @@
 
         var vehicleBody = $("#vehicle-body");
         var calibrationBody = $("#calibration-body");
-        var company = $("#company");
+        var trailer = $("#trailer");
         var licencePlate = $("#licence-plate");
-        var capacityLabel = $("#capacity");
+        var rfid = $("#rfid");
         var driverLabel = $("#current-driver");
         var vehicleImg = document.getElementById("vehicle-img");
         var calibrationChart = document.getElementById("calibration-chart");
+        var compartments = $("#compartments");
+
 
         $(document).ready(function() {
             $.uploadPreview({
@@ -457,44 +521,139 @@
                 label_field: "#image-label"
             });
 
-            company.hide();
             licencePlate.hide();
-            capacityLabel.hide();
+            rfid.hide();
             vehicleBody.hide();
             calibrationBody.hide();
+            trailer.hide();
+
+
+            var maxField = 5; //Input fields increment limitation
+            var addButton = $('.add-comp'); //Add button selector
+            var wrapper = $('.field_wrapper'); //Input field wrapper
+            var fieldHTML = '<div class="col-md-6" >'+
+                '<div class="input-group input-group-sm">' +
+                ' <div class="form-line">' +
+                '<label>Compartment Name</label>' +
+                '<input type="text" name="comp_name[]" required class="form-control"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-md-6" >' +
+                '<div class="input-group input-group-sm">' +
+                '<div class="form-line">' +
+                '<label>Capacity</label>' +
+                '<input type="text" name="capacity[]" required class="form-control"/>' +
+                '</div>' +
+                '</div>' +
+                '</div>'; //New input field html
+            var x = 1; //Initial field counter is 1
+
+            //Once add button is clicked
+            $(addButton).click(function(){
+                //Check maximum number of input fields
+                if(x < maxField){
+                    x++; //Increment field counter
+                    $(wrapper).append(fieldHTML); //Add field html
+                }
+            });
+
+
+
         });
 
 
-
         vehicle.on('change', function () {
-
             $.ajax("{{url('/get_vehicle')}}/" + vehicle.val(), {
                 success: function (message) {
                     console.log(message);
 
-                    company.show();
+                    trailer.show();
                     licencePlate.show();
-                    capacityLabel.show();
+                    rfid.show();
                     vehicleBody.show();
                     calibrationBody.show();
 
-
-
                     var temp = JSON.parse(message);
-                    company.html('Company: <strong>' + temp.company + '</strong>');
+                    rfid.html('RFID Code: <strong>' + temp.rfid + '</strong>');
                     licencePlate.html('License Plate: <strong>' + temp.licence + '</strong>');
-                    capacityLabel.html('Capacity: <strong>' + temp.capacity + '</strong>');
-                    calibrationChart.setAttribute("href", temp.image_link);
-                    vehicleImg.setAttribute("src", temp.calibration_chart_link);
+                    trailer.html('Trailer Plate: <strong>' + temp.trailer + '</strong>');
+                    calibrationChart.setAttribute("href", temp.calibration_chart_link);
+
+                    if (temp.image_link){
+                        vehicleImg.setAttribute("src", temp.image_link);
+                    }else {
+                        vehicleBody.hide();
+                    }
 
                 },
                 error: function (error) {
                     console.log(error);
-                    company.hide();
+                    trailer.hide();
                     licencePlate.hide();
-                    capacityLabel.hide();
+                    rfid.hide();
                 }
             });
+
+
+            $.ajax("{{url('/get_vehicle_compartments')}}/" + vehicle.val(), {
+                success: function (message) {
+                    console.log(message);
+                    var temp = JSON.parse(message);
+//                    var listItems = "<option value='' disabled>--Select your sub county--</option>";
+                    var listItems = "<tbody>";
+                    $.each(temp, function (i, item) {
+
+                        listItems += '<tr>' +
+                                        '<td>' + item.name + '</td>' +
+                                        '<td>' +
+                                            '<div class=" input-group-sm"><select name="product_' + item.id + '" class="select2 show-tick" required data-live-search="true">'+
+                                                '<option value="">Select Product</option>' +
+                                                '@foreach(\App\Product::all() as $product)' +
+                                                    '<option value="{{$product->id}}">{{$product->product_name}}</option>' +
+                                                '@endforeach'+
+                                            '</select></div>' +
+                                        '</td>' +
+                                        '<td>' +
+                                            '<div class="input-group input-group-sm"><div class="form-line"><input type="text" class="form-control" name="quantity_' + item.id + '" required placeholder="Quantity"> </div></div>' +
+                                        '</td>' +
+                                    '</tr>';
+                    });
+
+                    listItems += '</tbody>';
+                    compartments.html(listItems);
+                    //scounty.attr("disabled", false);
+
+                },
+                error: function (error) {
+                    console.log(error);
+                    trailer.hide();
+                    licencePlate.hide();
+                    rfid.hide();
+                    compartments.hide();
+                }
+            });
+        });
+
+        $("#add-comp").on("click", function (e) {
+            e.preventDefault();
+            var site = $("#link").val();
+            var year = $("#year").val();
+            var account = $("#account_name").val();
+            var rating = $("#rating").val();
+            var desc = $("#desc").val();
+            $.ajax({
+                    type: "POST",
+                    url: "{{url('/add_site')}}",
+                    data: {site: site, year: year, account: account, rating: rating, desc: desc, _token: "{!! csrf_token() !!}"},
+                    success: function (message) {
+                        $("#sites").html(message)
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                }
+            );
         });
 
 

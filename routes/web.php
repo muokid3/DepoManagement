@@ -20,6 +20,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/get_orgs/{user_group}', 'HomeController@get_orgs');
     Route::get('/get_vehicle/{vehicle_id}', 'HomeController@get_vehicle');
+    Route::get('/get_vehicle_compartments/{vehicle_id}', 'HomeController@get_vehicle_compartments');
 
 
 

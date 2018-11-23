@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBlackListsTable extends Migration
+class CreateCompartmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateBlackListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('black_lists', function (Blueprint $table) {
+        Schema::create('compartments', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('vehicle_id');
-            $table->unsignedInteger('depot_id')->nullable();
-            $table->unsignedInteger('blacklister_id');
-            $table->text('reason');
+            $table->string('name');
+            $table->string('capacity');
             $table->timestamps();
+
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+
         });
     }
 
@@ -30,6 +32,6 @@ class CreateBlackListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('black_lists');
+        Schema::dropIfExists('compartments');
     }
 }

@@ -74,7 +74,6 @@
                                         <tr>
                                             <th>Id</th>
                                             <th>Company Name</th>
-                                            <th>Vehicles</th>
                                             <th>Date Created</th>
                                         </tr>
                                         </thead>
@@ -87,7 +86,6 @@
                                                 <td>
                                                     <a href="{{url('/companies/'.($company->id))}}">{{$company->company_name}}</a>
                                                 </td>
-                                                <td>{{$company->vehicles()->count()}}</td>
                                                 <td>{{$company->created_at}}</td>
                                             </tr>
                                         @endforeach

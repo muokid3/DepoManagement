@@ -111,14 +111,24 @@ class HomeController extends Controller
 
         $vehicle = Vehicle::find($vehicle_id);
 
-
         echo json_encode(array(
             'image_link'      =>  $vehicle->image_link,
             'calibration_chart_link'   =>  $vehicle->calibration_chart,
-            'company'      =>  $vehicle->company->company_name,
+            'rfid'   =>  $vehicle->rfid_code ? $vehicle->rfid_code : "N/A",
+            'trailer'   =>  $vehicle->trailer_plate ? $vehicle->trailer_plate : "N/A",
             'licence'   =>  $vehicle->license_plate,
-            'capacity'   =>  $vehicle->capacity
         ), 200);
+
+    }
+
+    function get_vehicle_compartments($vehicle_id)
+    {
+
+        echo json_encode(
+            DB::table('compartments')->select('capacity','name', 'id')
+                ->where('vehicle_id', '=', $vehicle_id)
+                ->get()
+        );
 
     }
 

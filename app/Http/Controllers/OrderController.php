@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Compartment;
 use App\Depot;
 use App\Order;
 use Carbon\Carbon;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use PHPUnit\Util\Json;
 
 class OrderController extends Controller
 {
@@ -20,18 +22,48 @@ class OrderController extends Controller
     function new_order(Request $request)
     {
         $this->validate($request, [
-            'quantity' => 'required',
+            //'quantity' => 'required',
         ]);
 
 
         DB::transaction(function() use ($request) {
+
+            $destinationPath = 'orders';
+
+
             $order = new Order();
             $order->vehicle_id = $request->vehicle_id;
             $order->depot_id = $request->depot_id;
-            $order->product_id = $request->product_id;
-            $order->quantity = $request->quantity;
+            $order->company_id = $request->company_id;
             $order->loaded = 0;
             $order->driver_id = $request->driver_id;
+
+            if ($request->file('order_document')){
+                $image_time = Carbon::now()->addSeconds(13)->timestamp;
+                $image = $request->file('order_document');
+                $imageLink ='orders/'.$image_time.'-'.$image->getClientOriginalName();
+                $image->move($destinationPath,$image_time.'-'.$image->getClientOriginalName());
+
+                $order->order_document = $imageLink;
+            }
+
+            $itemsData = [];
+            foreach (Compartment::where('vehicle_id', $request->vehicle_id)->get() as $compartment)
+            {
+                $tikon = "product_".$compartment->id;
+                $lala = "quantity_".$compartment->id;
+
+                $itemsData[] = [
+                    'compartment_id' => $compartment->id,
+                    'product' => $request->$tikon,
+                    'quantity' => $request->$lala
+                ];
+            }
+
+
+            $order->items  = json_encode($itemsData);
+
+
 
             if ($order->saveOrFail()){
                 //notify driver

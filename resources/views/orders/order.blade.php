@@ -91,46 +91,41 @@
 
 
 
-                                                                <div class="col-md-2" style="margin-bottom: 0px">
+                                                                <div class="col-md-3" style="margin-bottom: 0px">
                                                                     Vehicle:
 
                                                                 </div>
 
-                                                                <div class="col-md-10">
-                                                                    {{--<button type="button" class="btn btn-success waves-effect m-r-20" data-toggle="modal" data-target="#newVehicleModal">Create new vehicle</button>--}}
-
+                                                                <div class="col-md-9">
                                                                     {{$order->vehicle->license_plate}}
                                                                 </div>
                                                             </div>
 
 
                                                             <div class="row clearfix">
-                                                                <div class="col-md-2" style="margin-bottom: 0px">
+                                                                <div class="col-md-3" style="margin-bottom: 0px">
+                                                                    Company:
+
+                                                                </div>
+
+                                                                <div class="col-md-9">
+                                                                    {{optional($order->company)->company_name }}
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="row clearfix">
+                                                                <div class="col-md-3" style="margin-bottom: 0px">
                                                                     Driver:
 
                                                                 </div>
 
-                                                                <div class="col-md-10">
+                                                                <div class="col-md-9">
                                                                     {{--<button type="button" class="btn btn-success waves-effect m-r-20" data-toggle="modal" data-target="#newVehicleModal">Create new vehicle</button>--}}
 
                                                                     {{$order->driver->name }} [ {{$order->driver->phone_no }}]
                                                                 </div>
                                                             </div>
-
-                                                            <h2 class="card-inside-title">Products</h2>
-
-                                                            <div class="row clearfix">
-                                                                <div class="col-md-4" style="margin-bottom: 0px">
-                                                                    {{$order->product->product_name }}
-
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    {{--<button type="button" class="btn btn-success waves-effect m-r-20" data-toggle="modal" data-target="#newVehicleModal">Create new vehicle</button>--}}
-
-                                                                    {{$order->quantity }} L
-                                                                </div>
-                                                            </div>
-
 
                                                             <div class="row clearfix">
                                                                 <div class="col-md-4" style="margin-bottom: 0px">
@@ -141,6 +136,20 @@
                                                                     {{--<button type="button" class="btn btn-success waves-effect m-r-20" data-toggle="modal" data-target="#newVehicleModal">Create new vehicle</button>--}}
 
                                                                     {{$order->sms_code }}
+                                                                </div>
+                                                            </div>
+
+                                                            <h2 class="card-inside-title">Products</h2>
+
+                                                            <div class="row clearfix">
+                                                                <div class="col-md-4" style="margin-bottom: 0px">
+                                                                    {{--{{$order->product->product_name }}--}}
+
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    {{--<button type="button" class="btn btn-success waves-effect m-r-20" data-toggle="modal" data-target="#newVehicleModal">Create new vehicle</button>--}}
+
+                                                                    {{--{{$order->quantity }} L--}}
                                                                 </div>
                                                             </div>
 
@@ -171,7 +180,7 @@
                                                                     </div>
 
                                                                     <div class="col-sm-6" id="company">
-                                                                        Company: <strong>{{$order->vehicle->company->company_name}}</strong>
+                                                                        {{--Company: <strong>{{$order->vehicle->company->company_name}}</strong>--}}
                                                                     </div>
                                                                 </div>
 
