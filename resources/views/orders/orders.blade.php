@@ -73,7 +73,6 @@
                                         <tr>
                                             <th></th>
                                             <th>License Plate</th>
-                                            <th>Product</th>
                                             <th>Driver</th>
                                             <th>Loaded</th>
                                             <th>SMS Code</th>
@@ -92,7 +91,6 @@
                                                 <td>
                                                     <a href="{{url('/vehicles/'.(optional($order->vehicle)->id))}}">{{optional($order->vehicle)->license_plate}}</a>
                                                 </td>
-                                                <td>{{optional($order->product)->product_name}}</td>
                                                 <td>{{optional($order->driver)->name}}</td>
                                                 <td>{{$order->loaded ? "Yes" : "No"}}</td>
                                                 <td>{{$order->sms_code}}</td>
